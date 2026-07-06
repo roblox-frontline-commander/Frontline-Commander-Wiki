@@ -121,12 +121,12 @@
 
 <script>
   /* =====================================================================
-     ADD A NEW MANUAL: drop one object into this list, then create a folder
-     "<no>-<Title-With-Dashes>/index.html" next to this file. That's it.
+     ADD A NEW MANUAL: drop one object into this list, then upload a file
+     "<no>-<Title-With-Dashes>.html" next to this file. That's it.
        no     -> catalogue number, e.g. "003"      (shown + used for ordering)
        title  -> display name
        tag    -> topic label (Reconnaissance / Gunnery / Command / ...)
-       href   -> folder the manual lives in, e.g. "003-Damage-Armor/"
+       href   -> the manual's file, e.g. "003-Damage-Armor.html"
        status -> omit for a live card; "planned" shows a greyed placeholder
      ===================================================================== */
   const MANUALS = [
@@ -134,14 +134,14 @@
       no: "001",
       title: "Detection & Concealment",
       tag: "Reconnaissance",
-      href: "001-Detection-Concealment/",
+      href: "001-Detection-Concealment.html",
       blurb: "How spotting really works — unit signature, terrain cover, the spot-clock, and the tactics that fall out of them."
     },
     {
       no: "002",
       title: "Vision & Line of Sight",
       tag: "Reconnaissance",
-      href: "002-Vision-Line-of-Sight/",
+      href: "002-Vision-Line-of-Sight.html",
       blurb: "Sightlines and eye-height cresting, directional vision arcs, and how sight is shared across your whole army."
     },
     {
