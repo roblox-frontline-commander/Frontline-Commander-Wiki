@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Field Manuals — Frontline Commander</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #0E1419; }
+
+  :root {
+    --ground: #0E1419;
+    --panel: #161E26;
+    --panel-2: #1B252E;
+    --line: rgba(199, 209, 217, 0.10);
+    --line-strong: rgba(199, 209, 217, 0.20);
+    --ink: #C7D1D9;
+    --ink-bright: #EAF1F6;
+    --muted: #7E8C99;
+    --amber: #E8A33D;
+    --blue: #3E8ED6;
+    --red: #D64B3E;
+    --display: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --body: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    --mono: "Consolas", "SF Mono", "Roboto Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  .page {
+    background:
+      linear-gradient(180deg, rgba(20,30,40,0.6), transparent 240px),
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding: clamp(28px, 6vw, 80px) 20px 90px;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--amber); margin: 0 0 26px; display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, rgba(232,163,61,0.5), transparent); }
+
+  h1 {
+    font-family: var(--display); font-weight: 700; text-transform: uppercase; color: var(--ink-bright);
+    font-size: clamp(52px, 11vw, 116px); line-height: 0.9; letter-spacing: 0.01em; margin: 0 0 22px; text-wrap: balance;
+  }
+  h1 .sub { display: block; color: var(--amber); font-size: 0.34em; letter-spacing: 0.05em; margin-top: 12px; }
+  .lead { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5; color: var(--ink); max-width: 58ch; margin: 0; }
+
+  .count {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 56px 0 18px; display: flex; align-items: center; gap: 14px;
+  }
+  .count::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+
+  .mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .mcard {
+    display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: inherit;
+    position: relative; background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--amber);
+    padding: 24px 26px 22px; transition: border-color .18s ease, transform .18s ease, background .18s ease;
+  }
+  .mcard:hover { transform: translateY(-3px); background: var(--panel-2); border-color: rgba(232,163,61,0.35); }
+  .mcard:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+  .mtop { display: flex; align-items: center; justify-content: space-between; }
+  .mno { font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; color: var(--amber); font-variant-numeric: tabular-nums; }
+  .mtag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 2px; padding: 3px 8px; }
+  .mcard h3 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 27px; letter-spacing: 0.02em; color: var(--ink-bright); line-height: 1; margin: 2px 0 0; text-wrap: balance; }
+  .mcard p { font-size: 15px; line-height: 1.5; color: var(--ink); margin: 0; flex: 1; }
+  .mcard .go { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); margin-top: 4px; }
+
+  .mcard.planned { border-left-color: var(--muted); opacity: 0.62; cursor: default; }
+  .mcard.planned:hover { transform: none; background: var(--panel); border-color: var(--line); }
+  .mcard.planned .mno, .mcard.planned .go { color: var(--muted); }
+
+  footer {
+    margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+
+  @media (max-width: 640px) { .mgrid { grid-template-columns: 1fr; } }
+
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="wrap">
+
+    <header class="reveal">
+      <p class="eyebrow">Frontline Commander</p>
+      <h1>Field Manuals<span class="sub">Fight smarter.</span></h1>
+      <p class="lead">Every system that decides an engagement, explained plainly — so you can read the battlefield and outplay it. New manuals drop as the game grows.</p>
+    </header>
+
+    <p class="count reveal" id="count">Manuals</p>
+    <div class="mgrid reveal" id="grid"></div>
+
+    <footer>
+      <span>Frontline Commander — a Halo Wars-style RTS built in Roblox</span>
+      <span>Contents subject to balancing</span>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  /* =====================================================================
+     ADD A NEW MANUAL: drop one object into this list, then create a folder
+     "<no>-<Title-With-Dashes>/index.html" next to this file. That's it.
+       no     -> catalogue number, e.g. "003"      (shown + used for ordering)
+       title  -> display name
+       tag    -> topic label (Reconnaissance / Gunnery / Command / ...)
+       href   -> folder the manual lives in, e.g. "003-Damage-Armor/"
+       status -> omit for a live card; "planned" shows a greyed placeholder
+     ===================================================================== */
+  const MANUALS = [
+    {
+      no: "001",
+      title: "Detection & Concealment",
+      tag: "Reconnaissance",
+      href: "001-Detection-Concealment/",
+      blurb: "How spotting really works — unit signature, terrain cover, the spot-clock, and the tactics that fall out of them."
+    },
+    {
+      no: "002",
+      title: "Vision & Line of Sight",
+      tag: "Reconnaissance",
+      href: "002-Vision-Line-of-Sight/",
+      blurb: "Sightlines and eye-height cresting, directional vision arcs, and how sight is shared across your whole army."
+    },
+    {
+      no: "003",
+      title: "Damage & Armor",
+      tag: "Gunnery",
+      status: "planned",
+      blurb: "Penetration, the armor matrix, directional armor, and what actually kills a tank."
+    },
+    {
+      no: "004",
+      title: "Territory & Control",
+      tag: "Command",
+      status: "planned",
+      blurb: "Reading the frontline overlay — how ground is taken, held, and cut off."
+    }
+  ];
+
+  (function render() {
+    const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const cards = MANUALS.slice().sort((a, b) => a.no.localeCompare(b.no)).map((m) => {
+      const planned = m.status === "planned";
+      const tag = m.tag ? `<span class="mtag">${esc(m.tag)}</span>` : "";
+      const inner =
+        `<div class="mtop"><span class="mno">${esc(m.no)}</span>${tag}</div>` +
+        `<h3>${esc(m.title)}</h3>` +
+        `<p>${esc(m.blurb)}</p>` +
+        `<span class="go">${planned ? "In development" : "Open manual &rarr;"}</span>`;
+      return planned
+        ? `<div class="mcard planned">${inner}</div>`
+        : `<a class="mcard" href="${esc(m.href)}">${inner}</a>`;
+    }).join("");
+    document.getElementById("grid").innerHTML = cards;
+
+    const live = MANUALS.filter(m => m.status !== "planned").length;
+    const soon = MANUALS.length - live;
+    document.getElementById("count").firstChild.textContent =
+      `${live} Manual${live === 1 ? "" : "s"}` + (soon ? ` · ${soon} incoming` : "");
+  })();
+</script>
+
+</body>
+</html>
