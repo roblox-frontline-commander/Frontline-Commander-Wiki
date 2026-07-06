@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Detection &amp; Concealment — Frontline Commander Field Manual</title>
+<style>
+  :root { color-scheme: dark; }   /* page is already dark — stop browsers auto-darkening it */
+  html, body { margin: 0; padding: 0; }
+  body { background: #0E1419; }
+
+  :root {
+    --ground: #0E1419;
+    --panel: #161E26;
+    --panel-2: #1B252E;
+    --line: rgba(199, 209, 217, 0.10);
+    --line-strong: rgba(199, 209, 217, 0.20);
+    --ink: #C7D1D9;
+    --ink-bright: #EAF1F6;
+    --muted: #7E8C99;
+    --amber: #E8A33D;
+    --blue: #3E8ED6;
+    --red: #D64B3E;
+    --exposed: #D64B3E;
+    --high: #E8A33D;
+    --mid: #C7C24A;
+    --low: #6FB07A;
+    --hidden: #3F9E6E;
+    --display: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --body: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    --mono: "Consolas", "SF Mono", "Roboto Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  .page {
+    background:
+      linear-gradient(180deg, rgba(20,30,40,0.6), transparent 220px),
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(20px, 5vw, 64px) 20px 80px;
+  }
+
+  .wrap { max-width: 940px; margin: 0 auto; }
+
+  /* ---- type ---- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, rgba(232,163,61,0.5), transparent);
+  }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; color: var(--ink-bright); margin: 0; }
+  h1 {
+    font-size: clamp(44px, 9vw, 92px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+  h2 {
+    font-size: clamp(26px, 4.5vw, 40px);
+    line-height: 1.0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.01em;
+    color: var(--ink-bright);
+  }
+  p { margin: 0; }
+  strong { color: var(--ink-bright); font-weight: 600; }
+  .lead { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5; color: var(--ink); max-width: 60ch; }
+  .muted { color: var(--muted); }
+
+  /* ---- hero ---- */
+  .hero { margin-bottom: 64px; }
+  .hero .eyebrow { margin-bottom: 26px; }
+  .hero h1 { margin-bottom: 22px; }
+  .hero h1 .sub { display: block; color: var(--amber); font-size: 0.42em; letter-spacing: 0.06em; margin-top: 10px; }
+
+  /* ---- section rhythm ---- */
+  section { margin-top: 60px; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .sec-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    padding-top: 4px;
+  }
+
+  /* ---- panels ---- */
+  .panel {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: clamp(20px, 3vw, 30px);
+  }
+  .panel::before, .panel::after {
+    content: "";
+    position: absolute;
+    width: 9px; height: 9px;
+    border-color: var(--line-strong);
+    border-style: solid;
+  }
+  .panel::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .panel::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+  /* ---- the three checks ---- */
+  .checks { display: grid; gap: 14px; }
+  .check {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 20px;
+    align-items: start;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--amber);
+    padding: 20px 24px;
+  }
+  .check .idx { font-family: var(--display); font-weight: 700; font-size: 40px; line-height: 1; color: var(--amber); }
+  .check h3 { margin-bottom: 6px; text-transform: uppercase; font-family: var(--display); font-size: 22px; letter-spacing: 0.03em; }
+  .check p { color: var(--ink); font-size: 15.5px; line-height: 1.55; }
+  .gate { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display:block; margin-top: 8px; }
+
+  /* ---- formula ---- */
+  .formula {
+    font-family: var(--mono);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 10px 14px;
+    text-align: center;
+    padding: 8px 0 4px;
+  }
+  .formula .term { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+  .formula .term b { font-size: clamp(15px, 2.2vw, 19px); letter-spacing: 0.02em; }
+  .formula .term .t-note { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .formula .op { color: var(--muted); font-size: 20px; padding: 0 2px; align-self: flex-start; margin-top: 3px; }
+  .up { color: var(--blue); }      /* grows range */
+  .down { color: var(--amber); }   /* shrinks range */
+  .result { color: var(--ink-bright); }
+  .legend { display:flex; gap: 22px; flex-wrap: wrap; justify-content:center; margin-top: 22px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .legend span { display:inline-flex; align-items:center; gap: 8px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display:inline-block; }
+
+  /* ---- data tables ---- */
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 14px; }
+  table.stat th, table.stat td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+  table.stat thead th { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+  table.stat tbody tr:last-child td { border-bottom: none; }
+  table.stat .unit { color: var(--ink-bright); font-family: var(--body); font-weight: 600; }
+  table.stat .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-bright); white-space: nowrap; }
+  table.stat .note { color: var(--muted); font-family: var(--body); font-size: 14px; }
+  .bar { height: 7px; border-radius: 3px; background: var(--line-strong); overflow: hidden; min-width: 90px; }
+  .bar > i { display:block; height: 100%; }
+
+  /* ---- heatmap matrix ---- */
+  .matrix { border-collapse: separate; border-spacing: 6px; width: 100%; font-family: var(--mono); }
+  .matrix th { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 400; padding: 6px 10px; vertical-align: bottom; text-align: center; }
+  .matrix th.rowh { text-align: left; width: 1%; white-space: nowrap; }
+  .matrix th .sig { display:block; color: var(--amber); font-size: 10px; margin-top: 3px; }
+  .matrix th .cov { display:block; color: var(--low); font-size: 10px; margin-top: 3px; }
+  .matrix td.rowh { text-align: left; color: var(--ink-bright); font-family: var(--body); font-weight: 600; padding-left: 4px; white-space: nowrap; }
+  .matrix td.rowh .sig { display:block; font-family: var(--mono); color: var(--amber); font-size: 10.5px; font-weight: 400; letter-spacing: 0.05em; }
+  .cell {
+    text-align: center;
+    padding: 16px 10px;
+    border: 1px solid var(--line);
+    position: relative;
+  }
+  .cell .pct { font-size: clamp(22px, 3.2vw, 30px); font-variant-numeric: tabular-nums; color: var(--ink-bright); line-height: 1; }
+  .cell .lbl { display:block; font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-top: 7px; }
+  .t-exposed { background: rgba(214,75,62,0.26); border-color: rgba(214,75,62,0.5); }
+  .t-high    { background: rgba(232,163,61,0.22); border-color: rgba(232,163,61,0.45); }
+  .t-mid     { background: rgba(199,194,74,0.16); border-color: rgba(199,194,74,0.38); }
+  .t-low     { background: rgba(111,176,122,0.18); border-color: rgba(111,176,122,0.42); }
+  .t-hidden  { background: rgba(63,158,110,0.28); border-color: rgba(63,158,110,0.55); }
+
+  /* ---- callouts / prose ---- */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .note-card { background: var(--panel); border: 1px solid var(--line); padding: 20px 22px; }
+  .note-card h3 { margin-bottom: 8px; display:flex; align-items:center; gap: 10px; }
+  .note-card p { font-size: 15px; line-height: 1.55; color: var(--ink); }
+  .tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; border-radius: 2px; }
+  .tag.red { color: var(--red); }
+  .tag.blue { color: var(--blue); }
+
+  .prose p { margin-bottom: 14px; max-width: 64ch; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .worked {
+    font-family: var(--mono);
+    font-size: 14.5px;
+    line-height: 1.85;
+    background: var(--panel-2);
+    border: 1px dashed var(--line-strong);
+    padding: 22px 24px;
+  }
+  .worked .k { color: var(--amber); }
+  .worked .b { color: var(--blue); }
+  .worked .r { color: var(--red); }
+  .worked .g { color: var(--low); }
+
+  /* ---- tactics ---- */
+  .tactics { display: grid; gap: 12px; }
+  .tactic {
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: baseline;
+    background: var(--panel); border: 1px solid var(--line); padding: 16px 20px;
+  }
+  .tactic .glyph { font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; }
+  .tactic p { font-size: 15.5px; line-height: 1.5; }
+  .tactic b { color: var(--ink-bright); }
+
+  footer { margin-top: 70px; padding-top: 22px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display:flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 640px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .check { grid-template-columns: 40px 1fr; gap: 14px; padding: 16px 18px; }
+    .check .idx { font-size: 30px; }
+    .matrix { border-spacing: 4px; }
+    .cell { padding: 12px 6px; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="wrap">
+
+    <header class="hero reveal">
+      <p class="eyebrow">Frontline Commander &nbsp;//&nbsp; Field Manual 04</p>
+      <h1>Detection<br>&amp; Concealment
+        <span class="sub">Seeing is not spotting.</span>
+      </h1>
+      <p class="lead">A unit can be in plain view and still go unnoticed. Sight range gets you a <em>look</em>; concealment decides whether that look becomes a <strong>contact</strong>. Learn the fog and you'll win engagements before they start.</p>
+    </header>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <h2>The Three Checks</h2>
+      </div>
+      <p class="lead muted" style="margin-bottom:22px;">Every tick, for every enemy near your forces, the game runs three gates <em>in order</em>. All three must pass before that enemy appears on your screen — model <em>and</em> icon. Fail any one and they melt back into the fog.</p>
+      <div class="checks">
+        <div class="check">
+          <span class="idx">1</span>
+          <div>
+            <h3>Line of Sight</h3>
+            <p>Can one of your units draw an <strong>unblocked line</strong> to it? Hills, buildings and treelines physically block the view. No clear line means invisible — at any range, no exceptions.</p>
+            <span class="gate">Gate — geometry · terrain · hard cover</span>
+          </div>
+        </div>
+        <div class="check">
+          <span class="idx">2</span>
+          <div>
+            <h3>Detection Range</h3>
+            <p>Is it <strong>close enough</strong>? Your full sight range is cut down by how well the target hides. A concealed enemy has to be far closer before you can pick it out.</p>
+            <span class="gate">Gate — signature · cover · exposure · optics</span>
+          </div>
+        </div>
+        <div class="check">
+          <span class="idx">3</span>
+          <div>
+            <h3>Spot Time</h3>
+            <p>Have you <strong>watched long enough</strong>? In the open, that's instant. In cover it takes seconds of unbroken observation — and if the target slips out of view, the clock resets.</p>
+            <span class="gate">Gate — cover-driven spot delay</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <h2>How Range Is Cut Down</h2>
+      </div>
+      <p class="lead muted" style="margin-bottom:26px;">Detection range starts at your unit's sight range and gets multiplied by five factors. Two shrink it — that's concealment. Two grow it. It never exceeds your base sight range.</p>
+      <div class="panel">
+        <div class="formula">
+          <span class="term"><b class="result">Detect&nbsp;range</b><span class="t-note muted">how far you spot</span></span>
+          <span class="op">=</span>
+          <span class="term"><b>Sight&nbsp;range</b><span class="t-note muted">base</span></span>
+          <span class="op">×</span>
+          <span class="term"><b class="up">Optics</b><span class="t-note up">viewer</span></span>
+          <span class="op">×</span>
+          <span class="term"><b class="down">Signature</b><span class="t-note down">target type</span></span>
+          <span class="op">×</span>
+          <span class="term"><b class="down">Cover</b><span class="t-note down">terrain</span></span>
+          <span class="op">×</span>
+          <span class="term"><b class="up">Exposure</b><span class="t-note up">movement</span></span>
+        </div>
+        <div class="legend">
+          <span><i class="dot" style="background:var(--blue)"></i> Grows your range</span>
+          <span><i class="dot" style="background:var(--amber)"></i> Shrinks it — concealment</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">03</span>
+        <h2>Signature — The Platform</h2>
+      </div>
+      <div class="prose" style="margin-bottom:22px;">
+        <p><strong>Signature</strong> is how observable a unit is by its very nature — size, noise, dust, heat. A tank is a big loud target you can't help but notice; infantry keep low and quiet. It's a flat multiplier on the range at which that unit can be detected: <span style="font-family:var(--mono)">1.0 = fully visible</span>, lower = stealthier.</p>
+      </div>
+      <div class="panel scroll">
+        <table class="stat">
+          <thead>
+            <tr><th>Unit class</th><th>Signature</th><th style="width:130px">Seen at</th><th>Read</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="unit">Tanks &amp; vehicles</td>
+              <td class="num">1.00</td>
+              <td><div class="bar"><i style="width:100%;background:var(--exposed)"></i></div></td>
+              <td class="note">Full sight range. No natural concealment — a big, hot, loud target.</td>
+            </tr>
+            <tr>
+              <td class="unit">Recon</td>
+              <td class="num">0.60</td>
+              <td><div class="bar"><i style="width:60%;background:var(--high)"></i></div></td>
+              <td class="note">Light and low. Spotted at 60% range — and carries the best optics itself.</td>
+            </tr>
+            <tr>
+              <td class="unit">Infantry</td>
+              <td class="num">0.30</td>
+              <td><div class="bar"><i style="width:30%;background:var(--low)"></i></div></td>
+              <td class="note">Hard to see even in the open — only picked out at 30% of sight range.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="font-size:14px; font-family:var(--mono); letter-spacing:0.04em; margin-top:14px;">// Thermal optics (coming) will read a separate heat signature — tanks run hot, infantry only warm — so they won't unmask infantry the way they unmask armour.</p>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">04</span>
+        <h2>Cover — The Terrain</h2>
+      </div>
+      <div class="prose" style="margin-bottom:22px;">
+        <p>Where a unit <em>stands</em> stacks on top of its signature. Forests smother detection; open fields offer nothing. And the strongest concealment of all isn't in this table — it's <strong>hard cover</strong>: put a hill or building between you and the enemy and you break Line of Sight entirely. That's Check 1 — invisible at <em>any</em> range.</p>
+      </div>
+      <div class="panel scroll">
+        <table class="stat">
+          <thead>
+            <tr><th>Terrain</th><th>In-game surface</th><th>Cover</th><th style="width:130px">Range kept</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="unit">Open ground</td>
+              <td class="note">Grass, fields, roads</td>
+              <td class="num">100%</td>
+              <td><div class="bar"><i style="width:100%;background:var(--exposed)"></i></div></td>
+            </tr>
+            <tr>
+              <td class="unit">Light forest</td>
+              <td class="note">Leafy grass, scattered trees</td>
+              <td class="num">58%</td>
+              <td><div class="bar"><i style="width:58%;background:var(--high)"></i></div></td>
+            </tr>
+            <tr>
+              <td class="unit">Dense forest</td>
+              <td class="note">Deep woods (the no-vehicle mud)</td>
+              <td class="num">15%</td>
+              <td><div class="bar"><i style="width:15%;background:var(--hidden)"></i></div></td>
+            </tr>
+            <tr>
+              <td class="unit">Hard cover</td>
+              <td class="note">Hills, buildings — blocks the line</td>
+              <td class="num">0%</td>
+              <td><div class="bar"><i style="width:4%;background:var(--blue)"></i></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">05</span>
+        <h2>The Concealment Matrix</h2>
+      </div>
+      <p class="lead muted" style="margin-bottom:24px;">Multiply signature by terrain and you get the money number: <strong>how close an enemy must get before it detects you</strong>, as a share of its sight range. Lower is stealthier. This is the whole game of hide-and-seek in one grid.</p>
+      <div class="panel scroll">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th class="rowh">&nbsp;</th>
+              <th>Open<span class="cov">×1.00</span></th>
+              <th>Light forest<span class="cov">×0.58</span></th>
+              <th>Dense forest<span class="cov">×0.15</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rowh">Tanks<span class="sig">sig 1.00</span></td>
+              <td class="cell t-exposed"><span class="pct">100%</span><span class="lbl">Fully exposed</span></td>
+              <td class="cell t-high"><span class="pct">58%</span><span class="lbl">Visible</span></td>
+              <td class="cell t-low"><span class="pct">15%</span><span class="lbl">Must close in</span></td>
+            </tr>
+            <tr>
+              <td class="rowh">Recon<span class="sig">sig 0.60</span></td>
+              <td class="cell t-high"><span class="pct">60%</span><span class="lbl">Visible</span></td>
+              <td class="cell t-mid"><span class="pct">35%</span><span class="lbl">Elusive</span></td>
+              <td class="cell t-hidden"><span class="pct">9%</span><span class="lbl">Nearly gone</span></td>
+            </tr>
+            <tr>
+              <td class="rowh">Infantry<span class="sig">sig 0.30</span></td>
+              <td class="cell t-mid"><span class="pct">30%</span><span class="lbl">Elusive</span></td>
+              <td class="cell t-low"><span class="pct">17%</span><span class="lbl">Must close in</span></td>
+              <td class="cell t-hidden"><span class="pct">5%</span><span class="lbl">Nearly invisible</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="worked" style="margin-top:16px;">
+        <span class="k">// worked example</span> — a scout with a <span class="b">500-stud</span> sight range<br>
+        Enemy <span class="r">tank in the open</span> &nbsp;→&nbsp; detected at ~<span class="r">500 studs</span>, instantly. It cannot hide.<br>
+        Enemy <span class="g">infantry in dense woods</span> &nbsp;→&nbsp; detected at ~<span class="g">25 studs</span> (5%), and only after a couple of seconds. Practically stepped on.
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">06</span>
+        <h2>Spot Time — The Clock</h2>
+      </div>
+      <div class="prose" style="margin-bottom:22px;">
+        <p>Being in range isn't the same as being seen <em>yet</em>. Cover doesn't just shrink range — it makes a contact take <strong>time</strong> to resolve. Watch an unbroken sightline and a hidden unit fades in; look away, or let it duck behind terrain, and the progress bleeds off.</p>
+      </div>
+      <div class="scroll panel">
+        <table class="stat">
+          <thead><tr><th>Where the target sits</th><th style="width:180px">Time to spot</th><th>Feel</th></tr></thead>
+          <tbody>
+            <tr><td class="unit">Open ground</td><td class="num" style="color:var(--exposed)">~instant</td><td class="note">You see it the moment it's in range.</td></tr>
+            <tr><td class="unit">Light forest</td><td class="num" style="color:var(--high)">~1 – 2 sec</td><td class="note">A beat of doubt before the contact firms up.</td></tr>
+            <tr><td class="unit">Dense forest</td><td class="num" style="color:var(--hidden)">~2 – 4 sec</td><td class="note">Slowest at the edge of range; quicker up close.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="font-size:14px; font-family:var(--mono); letter-spacing:0.04em; margin-top:14px;">// Moving targets resolve faster. And breaking line of sight resets the timer — a unit that keeps popping in and out of cover is a nightmare to pin.</p>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">07</span>
+        <h2>What Gives You Away</h2>
+      </div>
+      <div class="grid2">
+        <div class="note-card">
+          <h3><span class="tag blue">+50%</span> On the move</h3>
+          <p>A moving unit is easier to catch — motion widens the range it's detected at and speeds up the spot clock. You can't sneak at a run. A still ambush in cover is far quieter than one repositioning.</p>
+        </div>
+        <div class="note-card">
+          <h3><span class="tag red">Instant</span> Opening fire</h3>
+          <p>The instant a unit fires, the muzzle flash <strong>reveals it at full sight range, immediately</strong> — cover and signature stop mattering. Fire from concealment and you're committed. Volley, then reposition.</p>
+        </div>
+      </div>
+      <div class="note-card" style="margin-top:14px;">
+        <h3>Your eyes — Recon &amp; optics</h3>
+        <p>Optics is the one factor working <em>for</em> the watcher. Recon units carry stronger optics, so they punch through concealment — spotting hidden enemies sooner and farther than a tank ever could. Screen your advance with them and you'll see the ambush before you walk into it.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">08</span>
+        <h2>Field Tactics</h2>
+      </div>
+      <div class="tactics">
+        <div class="tactic"><span class="glyph">A1</span><p><b>Infantry own the woods.</b> ~5% detection in dense forest makes them the premier ambushers — invisible until an enemy is right on top of them.</p></div>
+        <div class="tactic"><span class="glyph">A2</span><p><b>Tanks can't hide in the open.</b> 100% signature means they're seen from max range. Mask armour behind terrain and move it through cover, not across fields.</p></div>
+        <div class="tactic"><span class="glyph">A3</span><p><b>Terrain beats camouflage.</b> Breaking line of sight with a hill or building is total concealment — no detection at any range. Use ridgelines and buildings as walls.</p></div>
+        <div class="tactic"><span class="glyph">A4</span><p><b>Let recon lead.</b> Their optics spot first. Push scouts ahead of your main force so you're the one who opens the engagement.</p></div>
+        <div class="tactic"><span class="glyph">A5</span><p><b>Hold fire until you mean it.</b> The first shot lights you up at full range. Ambush with everything at once, then relocate before the answer comes.</p></div>
+        <div class="tactic"><span class="glyph">A6</span><p><b>Respect the treeline.</b> You won't see what's inside a wood until you're close — and by then their infantry already see you. Never advance blind into forest.</p></div>
+        <div class="tactic"><span class="glyph">A7</span><p><b>Stillness is stealth.</b> Movement raises your profile and quickens the enemy's spot clock. Set your ambush and wait.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Frontline Commander — Detection &amp; Concealment</span>
+      <span>Values are % of the spotter's sight range · subject to balancing</span>
+    </footer>
+
+  </div>
+</div>
+
+</body>
+</html>
