@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Field Manuals — Frontline Commander</title>
+<title>Vision &amp; Line of Sight — Frontline Commander Field Manual</title>
 <style>
   :root { color-scheme: dark; }
   html, body { margin: 0; padding: 0; }
@@ -22,6 +22,11 @@
     --amber: #E8A33D;
     --blue: #3E8ED6;
     --red: #D64B3E;
+    --exposed: #D64B3E;
+    --high: #E8A33D;
+    --mid: #C7C24A;
+    --low: #6FB07A;
+    --hidden: #3F9E6E;
     --display: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
     --body: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
     --mono: "Consolas", "SF Mono", "Roboto Mono", ui-monospace, monospace;
@@ -31,7 +36,7 @@
 
   .page {
     background:
-      linear-gradient(180deg, rgba(20,30,40,0.6), transparent 240px),
+      linear-gradient(180deg, rgba(20,30,40,0.6), transparent 220px),
       repeating-linear-gradient(0deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
       repeating-linear-gradient(90deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
       var(--ground);
@@ -40,61 +45,194 @@
     font-size: 17px;
     line-height: 1.62;
     -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    padding: clamp(28px, 6vw, 80px) 20px 90px;
+    padding: clamp(20px, 5vw, 64px) 20px 80px;
   }
+
   .wrap { max-width: 940px; margin: 0 auto; }
 
+  /* ---- type ---- */
   .eyebrow {
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--amber); margin: 0 0 26px; display: flex; align-items: center; gap: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
-  .eyebrow::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, rgba(232,163,61,0.5), transparent); }
+  .eyebrow::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, rgba(232,163,61,0.5), transparent);
+  }
 
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; color: var(--ink-bright); margin: 0; }
   h1 {
-    font-family: var(--display); font-weight: 700; text-transform: uppercase; color: var(--ink-bright);
-    font-size: clamp(52px, 11vw, 116px); line-height: 0.9; letter-spacing: 0.01em; margin: 0 0 22px; text-wrap: balance;
+    font-size: clamp(44px, 9vw, 92px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
   }
-  h1 .sub { display: block; color: var(--amber); font-size: 0.34em; letter-spacing: 0.05em; margin-top: 12px; }
-  .lead { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5; color: var(--ink); max-width: 58ch; margin: 0; }
-
-  .count {
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--muted); margin: 56px 0 18px; display: flex; align-items: center; gap: 14px;
+  h2 {
+    font-size: clamp(26px, 4.5vw, 40px);
+    line-height: 1.0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
-  .count::after { content: ""; height: 1px; flex: 1; background: var(--line); }
-
-  .mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-  .mcard {
-    display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: inherit;
-    position: relative; background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--amber);
-    padding: 24px 26px 22px; transition: border-color .18s ease, transform .18s ease, background .18s ease;
+  h3 {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.01em;
+    color: var(--ink-bright);
   }
-  .mcard:hover { transform: translateY(-3px); background: var(--panel-2); border-color: rgba(232,163,61,0.35); }
-  .mcard:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
-  .mtop { display: flex; align-items: center; justify-content: space-between; }
-  .mno { font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; color: var(--amber); font-variant-numeric: tabular-nums; }
-  .mtag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 2px; padding: 3px 8px; }
-  .mcard h3 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 27px; letter-spacing: 0.02em; color: var(--ink-bright); line-height: 1; margin: 2px 0 0; text-wrap: balance; }
-  .mcard p { font-size: 15px; line-height: 1.5; color: var(--ink); margin: 0; flex: 1; }
-  .mcard .go { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); margin-top: 4px; }
+  p { margin: 0; }
+  strong { color: var(--ink-bright); font-weight: 600; }
+  .lead { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5; color: var(--ink); max-width: 60ch; }
+  .muted { color: var(--muted); }
 
-  .mcard.planned { border-left-color: var(--muted); opacity: 0.62; cursor: default; }
-  .mcard.planned:hover { transform: none; background: var(--panel); border-color: var(--line); }
-  .mcard.planned .mno, .mcard.planned .go { color: var(--muted); }
+  /* ---- hero ---- */
+  .hero { margin-bottom: 64px; }
+  .hero .eyebrow { margin-bottom: 26px; }
+  .hero h1 { margin-bottom: 22px; }
+  .hero h1 .sub { display: block; color: var(--amber); font-size: 0.42em; letter-spacing: 0.06em; margin-top: 10px; }
 
-  footer {
-    margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line);
-    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  /* ---- section rhythm ---- */
+  section { margin-top: 60px; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .sec-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    padding-top: 4px;
   }
 
-  @media (max-width: 640px) { .mgrid { grid-template-columns: 1fr; } }
+  /* ---- panels ---- */
+  .panel {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: clamp(20px, 3vw, 30px);
+  }
+  .panel::before, .panel::after {
+    content: "";
+    position: absolute;
+    width: 9px; height: 9px;
+    border-color: var(--line-strong);
+    border-style: solid;
+  }
+  .panel::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .panel::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+  /* ---- ordered / stat rows ---- */
+  .checks { display: grid; gap: 14px; }
+  .check {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 20px;
+    align-items: start;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--amber);
+    padding: 20px 24px;
+  }
+  .check .idx { font-family: var(--display); font-weight: 700; font-size: 40px; line-height: 1; color: var(--amber); }
+  .check h3 { margin-bottom: 6px; text-transform: uppercase; font-family: var(--display); font-size: 22px; letter-spacing: 0.03em; }
+  .check p { color: var(--ink); font-size: 15.5px; line-height: 1.55; }
+  .gate { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display:block; margin-top: 8px; }
+
+  /* ---- data tables ---- */
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 14px; }
+  table.stat th, table.stat td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+  table.stat thead th { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+  table.stat tbody tr:last-child td { border-bottom: none; }
+  table.stat .unit { color: var(--ink-bright); font-family: var(--body); font-weight: 600; }
+  table.stat .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-bright); white-space: nowrap; }
+  table.stat .note { color: var(--muted); font-family: var(--body); font-size: 14px; }
+  .blocks { color: var(--red); font-weight: 600; white-space: nowrap; }
+  .passes { color: var(--low); font-weight: 600; white-space: nowrap; }
+  .bar { height: 7px; border-radius: 3px; background: var(--line-strong); overflow: hidden; min-width: 90px; }
+  .bar > i { display:block; height: 100%; }
+
+  /* ---- callouts / prose ---- */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .note-card { background: var(--panel); border: 1px solid var(--line); padding: 20px 22px; }
+  .note-card h3 { margin-bottom: 8px; display:flex; align-items:center; gap: 10px; }
+  .note-card p { font-size: 15px; line-height: 1.55; color: var(--ink); }
+  .tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; border-radius: 2px; }
+  .tag.amber { color: var(--amber); }
+  .tag.blue { color: var(--blue); }
+  .tag.red { color: var(--red); }
+
+  .prose p { margin-bottom: 14px; max-width: 64ch; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .worked {
+    font-family: var(--mono);
+    font-size: 14.5px;
+    line-height: 1.85;
+    background: var(--panel-2);
+    border: 1px dashed var(--line-strong);
+    padding: 22px 24px;
+  }
+  .worked .k { color: var(--amber); }
+  .worked .b { color: var(--blue); }
+  .worked .r { color: var(--red); }
+  .worked .g { color: var(--low); }
+
+  /* ---- diagrams ---- */
+  .diagram { width: 100%; height: auto; display: block; }
+  .diagram-cap { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin-top: 18px; text-align: center; }
+  .diagram-cap b { color: var(--ink-bright); font-weight: 600; }
+  .dg-ground { fill: var(--panel-2); stroke: var(--line-strong); stroke-width: 1.5; }
+  .dg-sight { stroke: var(--amber); stroke-width: 2.2; stroke-dasharray: 7 5; fill: none; }
+  .dg-hull { fill: var(--blue); }
+  .dg-turret { fill: var(--blue); }
+  .dg-enemy { fill: var(--red); }
+  .dg-fan { fill: var(--amber); fill-opacity: 0.13; stroke: var(--amber); stroke-opacity: 0.5; stroke-width: 1.5; }
+  .dg-core { fill: var(--amber); fill-opacity: 0.30; stroke: var(--amber); stroke-opacity: 0.85; stroke-width: 1.5; }
+  .dg-arrow { stroke: var(--ink-bright); stroke-width: 2; fill: none; }
+  .dg-t { fill: var(--muted); font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .dg-t.em { fill: var(--ink-bright); }
+  .dg-t.red { fill: var(--red); }
+  .dg-t.blue { fill: var(--blue); }
+  .dg-t.amber { fill: var(--amber); }
+  .dg-block circle { fill: none; stroke: var(--red); stroke-width: 2.5; }
+  .dg-block line { stroke: var(--red); stroke-width: 2.5; }
+  .fanrow { display: grid; grid-template-columns: 320px 1fr; gap: 30px; align-items: center; }
+
+  /* ---- tactics ---- */
+  .tactics { display: grid; gap: 12px; }
+  .tactic {
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: baseline;
+    background: var(--panel); border: 1px solid var(--line); padding: 16px 20px;
+  }
+  .tactic .glyph { font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; }
+  .tactic p { font-size: 15.5px; line-height: 1.5; }
+  .tactic b { color: var(--ink-bright); }
+
+  .xref { display:flex; gap: 14px; align-items: center; background: var(--panel-2); border: 1px solid var(--line); border-left: 2px solid var(--blue); padding: 16px 20px; font-size: 15px; }
+  .xref .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); white-space: nowrap; }
+
+  footer { margin-top: 70px; padding-top: 22px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display:flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 640px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .check { grid-template-columns: 40px 1fr; gap: 14px; padding: 16px 18px; }
+    .check .idx { font-size: 30px; }
+    .fanrow { grid-template-columns: 1fr; gap: 20px; }
+  }
 
   .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
   @keyframes rise { to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; opacity: 1; transform: none; }
+  }
 </style>
 </head>
 <body>
@@ -102,86 +240,178 @@
 <div class="page">
   <div class="wrap">
 
-    <header class="reveal">
-      <p class="eyebrow">Frontline Commander</p>
-      <h1>Field Manuals<span class="sub">Fight smarter.</span></h1>
-      <p class="lead">Every system that decides an engagement, explained plainly — so you can read the battlefield and outplay it. New manuals drop as the game grows.</p>
+    <header class="hero reveal">
+      <p class="eyebrow">Frontline Commander &nbsp;//&nbsp; Field Manual 002</p>
+      <h1>Vision &amp;<br>Line of Sight
+        <span class="sub">What your units can see.</span>
+      </h1>
+      <p class="lead">Before you can detect an enemy, one of your units has to physically <em>see</em> it. Vision is the first gate — a literal line from a crew's eyes to the target, cut by every hill, wall and treeline in between. Own the sightlines and you fight from the dark.</p>
     </header>
 
-    <p class="count reveal" id="count">Manuals</p>
-    <div class="mgrid reveal" id="grid"></div>
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <h2>Sight Is Shared</h2>
+      </div>
+      <p class="lead muted" style="margin-bottom:22px;">Every unit carries its own eyes — and pools what it sees with the rest of your side. This is the gate that comes before everything else in the fog of war.</p>
+      <div class="grid2">
+        <div class="note-card">
+          <h3><span class="tag blue">Team</span> One spotter, whole army</h3>
+          <p>Vision is shared across your side. What a single scout on a ridge can see, your entire force sees — every gun can act on it. You don't need eyes on a target with the unit that fires at it.</p>
+        </div>
+        <div class="note-card">
+          <h3><span class="tag red">Fog</span> No line, no contact</h3>
+          <p>An enemy that <em>no</em> friendly unit can see is completely hidden — no model, no icon, nothing. Only once a unit has an unbroken line to it does the detection clock even begin.</p>
+        </div>
+      </div>
+      <div class="xref" style="margin-top:14px;">
+        <span class="k">Next gate</span>
+        <span>A clear line gets you a <em>look</em>. Whether that look becomes a <strong>contact</strong> — instantly, or after seconds of watching — is covered in <strong>Field Manual 001: Detection &amp; Concealment</strong>.</span>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <h2>The Sightline</h2>
+      </div>
+      <div class="prose" style="margin-bottom:22px;">
+        <p>Vision is cast as a straight line from the observing unit's eyepoint to the target. If anything solid sits on that line, the view is blocked — no partial credit. Some of the battlefield stops a sightline; some of it doesn't.</p>
+      </div>
+      <div class="panel scroll">
+        <table class="stat">
+          <thead>
+            <tr><th>On the sightline</th><th style="width:120px">Effect</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="unit">Hills &amp; ridges</td><td><span class="blocks">Blocks</span></td><td class="note">Terrain is solid to sight — the ground itself masks everything behind it.</td></tr>
+            <tr><td class="unit">Buildings &amp; structures</td><td><span class="blocks">Blocks</span></td><td class="note">A wall between you and the target cuts the line like any hill.</td></tr>
+            <tr><td class="unit">Woods (trunks)</td><td><span class="blocks">Blocks</span></td><td class="note">Where trunks actually intervene, the line is broken — the deeper the wood, the more it blinds.</td></tr>
+            <tr><td class="unit">Other units</td><td><span class="passes">Passes</span></td><td class="note">Friend or foe, units never mask each other — you can always see past your own line.</td></tr>
+            <tr><td class="unit">Build pads &amp; markers</td><td><span class="passes">Passes</span></td><td class="note">The invisible ground helpers under bases are ignored by sight.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">03</span>
+        <h2>Eye Height &amp; Cresting Hills</h2>
+      </div>
+      <div class="prose" style="margin-bottom:24px;">
+        <p>Here's the mechanic that makes terrain matter. Units don't see from the ground, and they don't float above it — they look out from roughly <strong>turret or head height</strong>. So a hill or ridge that rises between you and a target climbs above your sightline and <strong>cuts it</strong>. You cannot see through dead ground, even at point-blank range.</p>
+      </div>
+      <div class="panel">
+        <svg class="diagram" viewBox="0 0 820 300" role="img" aria-label="A hill between a unit and an enemy breaks the unit's line of sight.">
+          <!-- intended sightline, drawn first so the ground occludes its middle -->
+          <line class="dg-sight" x1="150" y1="206" x2="662" y2="240"></line>
+          <!-- ground profile: flat, hill, hollow -->
+          <polygon class="dg-ground" points="0,235 240,235 410,110 560,235 620,258 700,235 820,235 820,300 0,300"></polygon>
+          <!-- enemy in the hollow, hidden (dimmed) -->
+          <g opacity="0.45">
+            <polygon class="dg-enemy" points="662,232 674,246 650,246"></polygon>
+            <rect class="dg-enemy" x="654" y="246" width="16" height="4"></rect>
+          </g>
+          <text class="dg-t red" x="628" y="278" text-anchor="middle">Enemy — hidden</text>
+          <!-- your unit on the flat -->
+          <g>
+            <rect class="dg-hull" x="112" y="220" width="52" height="15" rx="3"></rect>
+            <rect class="dg-turret" x="128" y="210" width="24" height="11" rx="2"></rect>
+            <line x1="152" y1="215" x2="176" y2="213" style="stroke:var(--blue);stroke-width:3"></line>
+            <circle class="dg-hull" cx="150" cy="206" r="3.5"></circle>
+          </g>
+          <text class="dg-t blue" x="138" y="255" text-anchor="middle">Your unit</text>
+          <!-- eye-height tick -->
+          <line x1="96" y1="206" x2="96" y2="235" style="stroke:var(--muted);stroke-width:1"></line>
+          <text class="dg-t" x="90" y="224" text-anchor="end" style="font-size:10px">eye ht</text>
+          <!-- block marker where the line meets the near slope -->
+          <g class="dg-block" transform="translate(283,206)">
+            <circle cx="0" cy="0" r="11"></circle>
+            <line x1="-6" y1="-6" x2="6" y2="6"></line>
+            <line x1="6" y1="-6" x2="-6" y2="6"></line>
+          </g>
+          <text class="dg-t red em" x="360" y="150" text-anchor="middle">Hill breaks the line</text>
+        </svg>
+        <p class="diagram-cap"><b>Elevation flips it.</b> Put that same unit on the hilltop and it looks straight down over the crest — sightline clear.</p>
+      </div>
+      <div class="prose" style="margin-top:22px;">
+        <p>Two consequences fall out of this. <strong>High ground wins:</strong> a unit up top sees down over cover and crests that blind everyone below. And <strong>reverse-slope works:</strong> a unit tucked just behind a ridge is blind to what's beyond it — but is equally invisible to it. Sit hull-down behind a crest, expose only your gun, and you choose when the sightline opens.</p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">04</span>
+        <h2>Where They're Looking</h2>
+      </div>
+      <div class="prose" style="margin-bottom:24px;">
+        <p>A unit doesn't see equally in all directions. It sees <strong>farthest straight ahead</strong>, less to the flanks, and shortest to the rear — plus a tight, always-on <strong>360° bubble</strong> for anything that gets close. Facing is a real stat: an enemy creeping up on a unit's flank or back is seen far later than one walking up its front.</p>
+      </div>
+      <div class="panel fanrow">
+        <svg class="diagram" viewBox="0 0 400 330" role="img" aria-label="Top-down vision fan: long forward, short rear, with a 360-degree close-range core." style="max-width:320px; margin:0 auto;">
+          <polygon class="dg-fan" points="200,44 276,96 284,175 244,218 200,222 156,218 116,175 124,96"></polygon>
+          <circle class="dg-core" cx="200" cy="175" r="34"></circle>
+          <!-- unit + facing arrow -->
+          <rect class="dg-hull" x="190" y="166" width="20" height="26" rx="3"></rect>
+          <path class="dg-arrow" d="M200,150 L200,120 M200,120 L193,131 M200,120 L207,131"></path>
+          <text class="dg-t em" x="200" y="34" text-anchor="middle">Forward</text>
+          <text class="dg-t" x="300" y="179" text-anchor="start">Flank</text>
+          <text class="dg-t" x="200" y="250" text-anchor="middle">Rear</text>
+          <text class="dg-t amber" x="200" y="178" text-anchor="middle" style="font-size:10px">core</text>
+        </svg>
+        <div class="scroll" style="min-width:0;">
+          <table class="stat">
+            <thead><tr><th>Arc</th><th>Range</th><th style="width:110px"></th></tr></thead>
+            <tbody>
+              <tr><td class="unit">Forward</td><td class="num">100%</td><td><div class="bar"><i style="width:100%;background:var(--amber)"></i></div></td></tr>
+              <tr><td class="unit">Flank</td><td class="num">~65%</td><td><div class="bar"><i style="width:65%;background:var(--high)"></i></div></td></tr>
+              <tr><td class="unit">Rear</td><td class="num">~35%</td><td><div class="bar"><i style="width:35%;background:var(--hidden)"></i></div></td></tr>
+              <tr><td class="unit">Close core</td><td class="num">360°</td><td class="note">Always on, short radius</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="muted" style="font-size:14px; font-family:var(--mono); letter-spacing:0.04em; margin-top:14px;">// Example arc (a tank). Each unit tunes its own forward / flank / rear reach and its core radius.</p>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">05</span>
+        <h2>Then Comes Range</h2>
+      </div>
+      <div class="prose" style="margin-bottom:16px;">
+        <p>A clear, well-aimed sightline still only reveals a target that's <strong>within reach</strong>. Every unit has a sight range — and how far of it actually applies shrinks the better the target is hidden (dense forest, low signature). Line of sight decides <em>whether</em> you could see it; range and concealment decide <em>how far off</em> and <em>how fast</em> you actually do.</p>
+      </div>
+      <div class="xref">
+        <span class="k">Continued in</span>
+        <span><strong>Field Manual 001 — Detection &amp; Concealment</strong>: signature, terrain cover, the spot-clock, and how firing gives a hidden unit away.</span>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">06</span>
+        <h2>Field Tactics</h2>
+      </div>
+      <div class="tactics">
+        <div class="tactic"><span class="glyph">V1</span><p><b>Vision is a team sport.</b> One scout on high ground lights up the enemy for your whole firing line. Buy eyes, not just guns.</p></div>
+        <div class="tactic"><span class="glyph">V2</span><p><b>Take the high ground.</b> Elevation sees down over crests and cover that blind everyone below — and gets its sightlines first.</p></div>
+        <div class="tactic"><span class="glyph">V3</span><p><b>Fight hull-down.</b> Sit a unit just behind a ridge, roll up to fire, fall back to hide. You control when the line opens — and expose almost nothing.</p></div>
+        <div class="tactic"><span class="glyph">V4</span><p><b>Keep your front to the threat.</b> Vision is longest forward and weakest to the rear. Angle your advance and guard your own flanks and back.</p></div>
+        <div class="tactic"><span class="glyph">V5</span><p><b>Flank to stay unseen.</b> Approach from a unit's side or rear and you're spotted far later — long enough to close the distance or line up the shot.</p></div>
+        <div class="tactic"><span class="glyph">V6</span><p><b>Terrain is a wall, both ways.</b> Hills, buildings and woods block sight in <em>and</em> out. Route your moves behind them to arrive unseen.</p></div>
+        <div class="tactic"><span class="glyph">V7</span><p><b>Break the line to vanish.</b> Slip behind a ridge or into a wood and the enemy loses the sightline — and the sighting. Then reappear where they aren't looking.</p></div>
+      </div>
+    </section>
 
     <footer>
-      <span>Frontline Commander — a Halo Wars-style RTS built in Roblox</span>
-      <span>Contents subject to balancing</span>
+      <span>Frontline Commander — Vision &amp; Line of Sight</span>
+      <span>Arc &amp; range values are per-unit · subject to balancing</span>
     </footer>
 
   </div>
 </div>
-
-<script>
-  /* =====================================================================
-     ADD A NEW MANUAL: drop one object into this list, then create a folder
-     "<no>-<Title-With-Dashes>/index.html" next to this file. That's it.
-       no     -> catalogue number, e.g. "003"      (shown + used for ordering)
-       title  -> display name
-       tag    -> topic label (Reconnaissance / Gunnery / Command / ...)
-       href   -> folder the manual lives in, e.g. "003-Damage-Armor/"
-       status -> omit for a live card; "planned" shows a greyed placeholder
-     ===================================================================== */
-  const MANUALS = [
-    {
-      no: "001",
-      title: "Detection & Concealment",
-      tag: "Reconnaissance",
-      href: "001-Detection-Concealment/",
-      blurb: "How spotting really works — unit signature, terrain cover, the spot-clock, and the tactics that fall out of them."
-    },
-    {
-      no: "002",
-      title: "Vision & Line of Sight",
-      tag: "Reconnaissance",
-      href: "002-Vision-Line-of-Sight/",
-      blurb: "Sightlines and eye-height cresting, directional vision arcs, and how sight is shared across your whole army."
-    },
-    {
-      no: "003",
-      title: "Damage & Armor",
-      tag: "Gunnery",
-      status: "planned",
-      blurb: "Penetration, the armor matrix, directional armor, and what actually kills a tank."
-    },
-    {
-      no: "004",
-      title: "Territory & Control",
-      tag: "Command",
-      status: "planned",
-      blurb: "Reading the frontline overlay — how ground is taken, held, and cut off."
-    }
-  ];
-
-  (function render() {
-    const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-    const cards = MANUALS.slice().sort((a, b) => a.no.localeCompare(b.no)).map((m) => {
-      const planned = m.status === "planned";
-      const tag = m.tag ? `<span class="mtag">${esc(m.tag)}</span>` : "";
-      const inner =
-        `<div class="mtop"><span class="mno">${esc(m.no)}</span>${tag}</div>` +
-        `<h3>${esc(m.title)}</h3>` +
-        `<p>${esc(m.blurb)}</p>` +
-        `<span class="go">${planned ? "In development" : "Open manual &rarr;"}</span>`;
-      return planned
-        ? `<div class="mcard planned">${inner}</div>`
-        : `<a class="mcard" href="${esc(m.href)}">${inner}</a>`;
-    }).join("");
-    document.getElementById("grid").innerHTML = cards;
-
-    const live = MANUALS.filter(m => m.status !== "planned").length;
-    const soon = MANUALS.length - live;
-    document.getElementById("count").firstChild.textContent =
-      `${live} Manual${live === 1 ? "" : "s"}` + (soon ? ` · ${soon} incoming` : "");
-  })();
-</script>
 
 </body>
 </html>
