@@ -94,6 +94,17 @@
   .lead { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5; color: var(--ink); max-width: 60ch; }
   .muted { color: var(--muted); }
 
+  /* ---- back link ---- */
+  .backlink {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; margin-bottom: 30px;
+    transition: color .16s ease, gap .16s ease;
+  }
+  .backlink:hover { color: var(--amber); gap: 13px; }
+  .backlink:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+  .backlink .arr { color: var(--amber); font-size: 14px; }
+
   /* ---- hero ---- */
   .hero { margin-bottom: 64px; }
   .hero .eyebrow { margin-bottom: 26px; }
@@ -239,6 +250,8 @@
 
 <div class="page">
   <div class="wrap">
+
+    <a class="backlink reveal" href="index.html"><span class="arr">&larr;</span> All Field Manuals</a>
 
     <header class="hero reveal">
       <p class="eyebrow">Frontline Commander &nbsp;//&nbsp; Field Manual 002</p>
