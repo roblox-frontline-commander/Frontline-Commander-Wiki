@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>TTK Doctrine &amp; Tier Law — Frontline Commander</title>
+<style>
+  :root {
+    color-scheme: dark;   /* page is already dark — stop browsers auto-darkening it */
+    --ground: #0E1419;
+    --panel: #161E26;
+    --panel-2: #1B252E;
+    --line: rgba(199, 209, 217, 0.10);
+    --line-strong: rgba(199, 209, 217, 0.20);
+    --ink: #C7D1D9;
+    --ink-bright: #EAF1F6;
+    --muted: #7E8C99;
+    --amber: #E8A33D;
+    --blue: #3E8ED6;
+    --red: #D64B3E;
+    --exposed: #D64B3E;
+    --high: #E8A33D;
+    --mid: #C7C24A;
+    --low: #6FB07A;
+    --hidden: #3F9E6E;
+    --display: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --body: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    --mono: "Consolas", "SF Mono", "Roboto Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  .page {
+    background:
+      linear-gradient(180deg, rgba(20,30,40,0.6), transparent 220px),
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(20px, 5vw, 64px) 20px 80px;
+  }
+
+  .wrap { max-width: 940px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, rgba(232,163,61,0.5), transparent);
+  }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; color: var(--ink-bright); margin: 0; }
+  h1 {
+    font-size: clamp(44px, 9vw, 92px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+  h2 {
+    font-size: clamp(26px, 4.5vw, 40px);
+    line-height: 1.0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.01em;
+    color: var(--ink-bright);
+  }
+  p { margin: 0; }
+  strong { color: var(--ink-bright); font-weight: 600; }
+  .lead { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5; color: var(--ink); max-width: 60ch; }
+  .muted { color: var(--muted); }
+
+  .hero { margin-bottom: 64px; }
+  .hero .eyebrow { margin-bottom: 26px; }
+  .hero h1 { margin-bottom: 22px; }
+  .hero h1 .sub { display: block; color: var(--amber); font-size: 0.42em; letter-spacing: 0.06em; margin-top: 10px; }
+  .hero .meta { margin-top: 24px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display: flex; gap: 24px; flex-wrap: wrap; }
+  .hero .meta b { color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 60px; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .sec-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    padding-top: 4px;
+  }
+  .sec-sub { color: var(--muted); font-size: 16px; max-width: 66ch; margin: -12px 0 22px; }
+
+  .panel {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: clamp(20px, 3vw, 30px);
+  }
+  .panel::before, .panel::after {
+    content: "";
+    position: absolute;
+    width: 9px; height: 9px;
+    border-color: var(--line-strong);
+    border-style: solid;
+  }
+  .panel::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .panel::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+  .checks { display: grid; gap: 14px; }
+  .check {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 20px;
+    align-items: start;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--amber);
+    padding: 20px 24px;
+  }
+  .check .idx { font-family: var(--display); font-weight: 700; font-size: 40px; line-height: 1; color: var(--amber); }
+  .check h3 { margin-bottom: 6px; text-transform: uppercase; font-family: var(--display); font-size: 22px; letter-spacing: 0.03em; }
+  .check p { color: var(--ink); font-size: 15.5px; line-height: 1.55; }
+  .gate { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display:block; margin-top: 8px; }
+
+  .formula {
+    font-family: var(--mono);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 10px 14px;
+    text-align: center;
+    padding: 8px 0 4px;
+  }
+  .formula .term { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+  .formula .term b { font-size: clamp(15px, 2.2vw, 19px); letter-spacing: 0.02em; }
+  .formula .term .t-note { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .formula .op { color: var(--muted); font-size: 20px; padding: 0 2px; align-self: flex-start; margin-top: 3px; }
+  .up { color: var(--blue); }
+  .down { color: var(--amber); }
+  .result { color: var(--ink-bright); }
+  .legend { display:flex; gap: 22px; flex-wrap: wrap; justify-content:center; margin-top: 22px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .legend span { display:inline-flex; align-items:center; gap: 8px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display:inline-block; }
+
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 14px; }
+  table.stat th, table.stat td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+  table.stat thead th { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+  table.stat tbody tr:last-child td { border-bottom: none; }
+  table.stat .unit { color: var(--ink-bright); font-family: var(--body); font-weight: 600; }
+  table.stat .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-bright); white-space: nowrap; }
+  table.stat .ctr { text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.stat .note { color: var(--muted); font-family: var(--body); font-size: 14px; }
+  .w { color: var(--low); font-weight: 600; }       /* wins / its job */
+  .x { color: var(--muted); }                       /* weak / cannot */
+  .os { color: var(--red); font-weight: 700; }      /* one-shot */
+  .buff { color: var(--blue); }
+  .nerf { color: var(--amber); }
+
+  .matrix { border-collapse: separate; border-spacing: 6px; width: 100%; font-family: var(--mono); }
+  .matrix th { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 400; padding: 6px 10px; vertical-align: bottom; text-align: center; }
+  .matrix th.rowh { text-align: left; width: 1%; white-space: nowrap; }
+  .matrix td.rowh { text-align: left; color: var(--ink-bright); font-family: var(--body); font-weight: 600; padding-left: 4px; white-space: nowrap; }
+  .matrix td.rowh .sig { display:block; font-family: var(--mono); color: var(--amber); font-size: 10.5px; font-weight: 400; letter-spacing: 0.05em; }
+  .cell { text-align: center; padding: 16px 10px; border: 1px solid var(--line); position: relative; }
+  .cell .pct { font-size: clamp(22px, 3.2vw, 30px); font-variant-numeric: tabular-nums; color: var(--ink-bright); line-height: 1; }
+  .cell .lbl { display:block; font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-top: 7px; }
+  .t-exposed { background: rgba(214,75,62,0.26); border-color: rgba(214,75,62,0.5); }
+  .t-high    { background: rgba(232,163,61,0.22); border-color: rgba(232,163,61,0.45); }
+  .t-mid     { background: rgba(199,194,74,0.16); border-color: rgba(199,194,74,0.38); }
+  .t-low     { background: rgba(111,176,122,0.18); border-color: rgba(111,176,122,0.42); }
+  .t-hidden  { background: rgba(63,158,110,0.28); border-color: rgba(63,158,110,0.55); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .note-card { background: var(--panel); border: 1px solid var(--line); padding: 20px 22px; }
+  .note-card h3 { margin-bottom: 8px; display:flex; align-items:center; gap: 10px; }
+  .note-card p { font-size: 15px; line-height: 1.55; color: var(--ink); }
+  .tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; border-radius: 2px; }
+  .tag.red { color: var(--red); }
+  .tag.blue { color: var(--blue); }
+  .tag.green { color: var(--low); }
+  .tag.amber { color: var(--amber); }
+
+  .prose p { margin-bottom: 14px; max-width: 64ch; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .worked { font-family: var(--mono); font-size: 14.5px; line-height: 1.85; background: var(--panel-2); border: 1px dashed var(--line-strong); padding: 22px 24px; }
+  .worked .k { color: var(--amber); }
+  .worked .b { color: var(--blue); }
+  .worked .r { color: var(--red); }
+  .worked .g { color: var(--low); }
+
+  .tactics { display: grid; gap: 12px; }
+  .tactic { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: baseline; background: var(--panel); border: 1px solid var(--line); padding: 16px 20px; }
+  .tactic .glyph { font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; }
+  .tactic p { font-size: 15.5px; line-height: 1.5; }
+  .tactic b { color: var(--ink-bright); }
+
+  footer { margin-top: 70px; padding-top: 22px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display:flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 640px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .check { grid-template-columns: 40px 1fr; gap: 14px; padding: 16px 18px; }
+    .check .idx { font-size: 30px; }
+    .matrix { border-spacing: 4px; }
+    .cell { padding: 12px 6px; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; opacity: 1; transform: none; } }
+
+  /* doc-local: spacing helpers */
+  .stack > * + * { margin-top: 14px; }
+  h3.block-title { margin: 26px 0 12px; text-transform: uppercase; font-family: var(--display); font-size: 21px; letter-spacing: 0.03em; }
+  h3.block-title .cap { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.08em; margin-left: 10px; text-transform: none; }
+</style>
+
+<style>html, body { margin: 0; padding: 0; } body { background: #0E1419; }</style>
+</head>
+<body>
+<div class="page">
+<div class="wrap">
+
+<header class="hero reveal">
+  <p class="eyebrow">Frontline Commander &nbsp;//&nbsp; Design Doctrine</p>
+  <h1>TTK Doctrine<br>&amp; Tier Law
+    <span class="sub">Feel first. Stats derived.</span>
+  </h1>
+  <p class="lead">Stop tuning individual numbers. Define how every fight should feel — in shots and seconds — then derive every stat from that contract, and make the three-tier era system a single law that can never break it.</p>
+  <div class="meta">
+    <span><b>Tier law</b> ×1.45 HP &amp; damage per tier</span>
+    <span><b>Covers</b> ground · helis · jets · AA</span>
+    <span><b>Status</b> approved · TankGun shipped · air planned</span>
+  </div>
+</header>
+
+<!-- ================================================================ -->
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2>Where realism lives, where fun lives</h2>
+  </div>
+  <p class="sec-sub">The core trick — Warno does exactly this: realism goes in the <strong>behavior</strong>, fun goes in the <strong>numbers</strong>.</p>
+
+  <div class="grid2">
+    <div class="note-card">
+      <h3><span class="tag amber">Realism</span> The behavior layer</h3>
+      <p>Lock-on delays, facing arcs, LoS and cover, deploy times, reload rhythms, scatter, missile flight time, refuse-wrong-target logic. This is where the game feels authentic — and none of it can one-shot anyone.</p>
+    </div>
+    <div class="note-card">
+      <h3><span class="tag blue">Fun</span> The numbers layer</h3>
+      <p>HP pools and damage are pure game design. A real Javelin kills any real tank in one hit; ours does 60% and cripples, because a fight you can react to is a fight worth having. The <em>rhythm</em> is real; the lethality is tuned.</p>
+    </div>
+  </div>
+
+  <h3 class="block-title">The six floor rules <span class="cap">never violated — any tier, any matchup</span></h3>
+  <div class="checks">
+    <div class="check">
+      <span class="idx">F1</span>
+      <div>
+        <h3>No same-tier one-shots on vehicles</h3>
+        <p>With exactly one sanctioned exception: an ATGM into the <strong>side or rear</strong>. That's the "you got flanked" punishment — telegraphed (3s lock + missile flight ≈ 4.7s of warning) and rationed (pop cost, long reload).</p>
+      </div>
+    </div>
+    <div class="check">
+      <span class="idx">F2</span>
+      <div>
+        <h3>Every kill has ≥ 3 seconds of counterplay</h3>
+        <p>From first warning (spotted chatter, lock-on, first hit) to death. If a unit dies with no decision available to its owner, the numbers are wrong.</p>
+      </div>
+    </div>
+    <div class="check">
+      <span class="idx">F3</span>
+      <div>
+        <h3>Small arms never delete</h3>
+        <p>Infantry-vs-infantry is attrition (15–20s), never burst removal. Squads lose soldiers one at a time — the fight visibly degrades, it doesn't evaporate.</p>
+      </div>
+    </div>
+    <div class="check">
+      <span class="idx">F4</span>
+      <div>
+        <h3>Cross-tier dominance may break F1</h3>
+        <p>A T3 shell one-shotting a T1 scout is the reward for teching. Dominance <strong>down</strong> the ladder is the fantasy; fragility <strong>up</strong> the ladder is the price of massing cheap units.</p>
+      </div>
+    </div>
+    <div class="check">
+      <span class="idx">F5</span>
+      <div>
+        <h3>No free air</h3>
+        <p>Air power never trades HP on the line — it trades <strong>exposure against the AA umbrella</strong>. A heli inside same-tier AA range dies in seconds; a jet entering it takes heavy damage or aborts. If air can strike without risking anything, AA has failed as a role.</p>
+      </div>
+    </div>
+    <div class="check">
+      <span class="idx">F6</span>
+      <div>
+        <h3>Every strike is telegraphed</h3>
+        <p>F2 applied to the sky: a jet run announces itself (engine audio + target marker) 3–4s before ordnance lands; a heli's ATGM has the same lock-on beat as the infantry Javelin. Nobody dies to an invisible plane.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>The matchup contract — ground</h2>
+  </div>
+  <p class="sec-sub">The spec, in shots and seconds, under typical conditions (same tier, frontal arc, in range, stationary). Every future unit and every rebalance is checked against this. It never changes when tiers change.</p>
+
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Attacker ↓ vs →</th><th class="ctr">Tank</th><th class="ctr">IFV</th><th class="ctr">Infantry</th><th class="ctr">Artillery</th><th class="ctr">Recon</th></tr></thead>
+      <tbody>
+        <tr><td class="unit">Tank (main gun)</td><td class="ctr">3–4 shots<br><span class="x">2–3 flank</span></td><td class="ctr w">2–3 shots</td><td class="ctr w">2 shells</td><td class="ctr w">1–2</td><td class="ctr w">1–2</td></tr>
+        <tr><td class="unit">Tank (coax MG)*</td><td class="ctr x">—</td><td class="ctr x">—</td><td class="ctr">suppressive<br><span class="x">~20s solo kill</span></td><td class="ctr x">—</td><td class="ctr x">chip</td></tr>
+        <tr><td class="unit">IFV autocannon</td><td class="ctr x">chip only</td><td class="ctr">8–10s duel</td><td class="ctr w">5–6s shred</td><td class="ctr w">strong</td><td class="ctr w">strong</td></tr>
+        <tr><td class="unit">IFV TOW (2 rds)</td><td class="ctr w">load ≈ 75% HP<br><span class="x">flank pair kills</span></td><td class="ctr w">2 missiles</td><td class="ctr x">refuses</td><td class="ctr w">1–2</td><td class="ctr w">1–2</td></tr>
+        <tr><td class="unit">Assault infantry</td><td class="ctr x">useless</td><td class="ctr x">weak</td><td class="ctr w">15–20s<br><span class="x">wins vs non-assault</span></td><td class="ctr">ok if close</td><td class="ctr">slow</td></tr>
+        <tr><td class="unit">ATGM infantry</td><td class="ctr w">2 front<br><span class="os">1 flank ⚠</span></td><td class="ctr w">2 front<br><span class="os">1 flank ⚠</span></td><td class="ctr x">refuses (×0.15)</td><td class="ctr w">1–2</td><td class="ctr w">1–2</td></tr>
+        <tr><td class="unit">Artillery (splash)</td><td class="ctr">direct ≈ 60%<br><span class="x">edge chips</span></td><td class="ctr">direct ≈ 75%</td><td class="ctr w">near-hit wipes</td><td class="ctr w">counter-battery</td><td class="ctr w">direct kills</td></tr>
+        <tr><td class="unit">Recon</td><td class="ctr x">useless</td><td class="ctr x">weak</td><td class="ctr">slow kill</td><td class="ctr">ok</td><td class="ctr">even</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-family:var(--mono);font-size:12px;margin-top:10px">* coax MG = planned second weapon on tanks — lets the main gun stay a 9s sledgehammer without the tank being helpless between shells. &nbsp;⚠ = the one sanctioned same-tier one-shot (F1's exception).</p>
+
+  <div class="tactics" style="margin-top:16px">
+    <div class="tactic"><span class="glyph">READ</span><p><b>Every row has a green lane (its job) and a grey lane (its counter).</b> Rock-paper-scissors with tanks as slow scissors-that-also-cut-paper: tanks beat everything <em>eventually</em>, but 9s reloads mean massed cheap counters and flankers punish overcommitment. The air layer below bolts on without changing a single ground cell.</p></div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>The air &amp; AA contract</h2>
+  </div>
+  <p class="sec-sub">Two different kinds of air. <strong>Helicopters are persistent units</strong> — they live on the map, hover, ambush, and die like units. <strong>Jets are call-in strikes</strong> — they enter from the map edge, deliver, and leave; their balance levers are cooldown, telegraph, and AA denial, never HP trading. AA is the tax every army pays once the sky opens at Tier&nbsp;2.</p>
+
+  <h3 class="block-title">Shooting down <span class="cap">who can hurt air at all — the load-bearing mechanic</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Ground attacker ↓ vs →</th><th class="ctr">Helicopter</th><th class="ctr">Jet (during its run)</th></tr></thead>
+      <tbody>
+        <tr><td class="unit">AntiAir (SPAA)</td><td class="ctr w">shreds — same-tier heli in 5–8s of exposure</td><td class="ctr w">denies — ~50% HP per pass; second pass kills</td></tr>
+        <tr><td class="unit">IFV autocannon</td><td class="ctr">self-defense — ~15–20s, forces the heli off</td><td class="ctr x">cannot track</td></tr>
+        <tr><td class="unit">Infantry small arms</td><td class="ctr x">chip at close range (annoyance)</td><td class="ctr x">cannot</td></tr>
+        <tr><td class="unit">Tank / ATGM / Artillery</td><td class="ctr x">cannot target air</td><td class="ctr x">cannot</td></tr>
+        <tr><td class="unit">MANPADS squad <span class="tag green" style="margin-left:6px">future T2+</span></td><td class="ctr w">the infantry answer — same ATGM behavior kit (lock, refuses ground)</td><td class="ctr">damages, rarely kills</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="block-title">Shooting up <span class="cap">what air does to the ground</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Air attacker ↓ vs →</th><th class="ctr">Tank</th><th class="ctr">IFV / light</th><th class="ctr">Infantry</th><th class="ctr">AntiAir</th></tr></thead>
+      <tbody>
+        <tr><td class="unit">Heli ATGM</td><td class="ctr w">2 shots<br><span class="x">same numbers as the Javelin</span></td><td class="ctr w">2 shots</td><td class="ctr x">refuses (×0.15)</td><td class="ctr w">2 shots — <strong>outranges AA slightly</strong>: the standoff duel</td></tr>
+        <tr><td class="unit">Heli rocket barrage</td><td class="ctr x">chips (×0.35)</td><td class="ctr">heavy chip</td><td class="ctr w">near-hit wipes — arty-style splash, scatter-limited</td><td class="ctr">hurts</td></tr>
+        <tr><td class="unit">Heli autocannon</td><td class="ctr x">chip</td><td class="ctr">8–10s</td><td class="ctr w">5–6s shred</td><td class="ctr x">losing duel</td></tr>
+        <tr><td class="unit">Jet bomb run</td><td class="ctr w">direct ≈ 70%<br><span class="x">edge chips</span></td><td class="ctr w">direct kills</td><td class="ctr w">near-hit wipes</td><td class="ctr w">the AA-deletion tool — if it survives the run in</td></tr>
+        <tr><td class="unit">A-10 strafing run</td><td class="ctr">rear/top ≈ 40%<br><span class="x">the BRRT is a punish, not a delete</span></td><td class="ctr w">shreds a column</td><td class="ctr w">shreds a line</td><td class="ctr">heavy</td></tr>
+        <tr><td class="unit">AA jet (patrol)</td><td class="ctr x">—</td><td class="ctr x">—</td><td class="ctr x">—</td><td class="ctr">kills helis in one pass · contests enemy runs</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tactics" style="margin-top:16px">
+    <div class="tactic"><span class="glyph">LOOP</span><p><b>The air triangle.</b> Helis hard-counter tanks (flying Javelins at 3× ground speed) → AA hard-counters helis (seconds, not a fight) → bombs and artillery hard-counter AA (soft, expensive, must sit near the front). Jets loop over the top: bombers delete AA blobs, the A-10 punishes light-vehicle spam, AA jets police the sky itself.</p></div>
+  </div>
+
+  <div class="worked" style="margin-top:16px">
+    <span class="k">// why jets are call-ins, not units</span><br>
+    <span class="r">Persistent jet circling the map</span> &nbsp;→&nbsp; breaks F2 (no counterplay window) and turns AA into a permanent stalemate.<br>
+    <span class="g">Strike run</span> &nbsp;→&nbsp; you see the telegraph, you get your 3–4s, the AA umbrella made the run suicidal or it didn't — and the jet is gone either way. All the fantasy, none of the degenerate hover.<br>
+    <span class="b">Helis stay units</span> &nbsp;→&nbsp; precisely because ground autocannons + AA can fight them continuously.
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2>The tier law</h2>
+  </div>
+  <p class="sec-sub">One rule generates every tier. Because HP and damage scale identically, the same-tier contract holds at every tier automatically — and cross-tier dominance emerges from the math instead of being tuned.</p>
+
+  <div class="panel">
+    <div class="formula">
+      <span class="term"><b class="result">Tier N+1</b><span class="t-note muted">next era</span></span>
+      <span class="op">=</span>
+      <span class="term"><b>Tier N</b><span class="t-note muted">base</span></span>
+      <span class="op">×</span>
+      <span class="term"><b class="up">1.45 HP</b><span class="t-note up">survivability</span></span>
+      <span class="op">×</span>
+      <span class="term"><b class="up">1.45 DMG</b><span class="t-note up">firepower</span></span>
+      <span class="op">+</span>
+      <span class="term"><b class="down">+10% range/sight</b><span class="t-note down">optics</span></span>
+      <span class="op">·</span>
+      <span class="term"><b class="down">−5% reload</b><span class="t-note down">crews</span></span>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--blue)"></i> The engine of dominance</span>
+      <span><i class="dot" style="background:var(--amber)"></i> Quality bumps — flavor, not power</span>
+      <span><i class="dot" style="background:var(--hidden)"></i> Price ×~1.7 · Pop +0–1 — massing T1 stays legal</span>
+    </div>
+  </div>
+
+  <h3 class="block-title">Proof: the tank duel matrix <span class="cap">frontal shots-to-kill · T1 anchor = live M60A1 (500 HP / 175 dmg)</span></h3>
+  <div class="panel scroll">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th class="rowh">&nbsp;</th>
+          <th>vs T1<span class="cov">500 HP</span></th>
+          <th>vs T2<span class="cov">725 HP</span></th>
+          <th>vs T3<span class="cov">1050 HP</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rowh">T1 attacker<span class="sig">M60 · 175 dmg</span></td>
+          <td class="cell t-mid"><span class="pct">4</span><span class="lbl">the contract</span></td>
+          <td class="cell t-low"><span class="pct">6</span><span class="lbl">uphill</span></td>
+          <td class="cell t-hidden"><span class="pct">9</span><span class="lbl">hopeless</span></td>
+        </tr>
+        <tr>
+          <td class="rowh">T2 attacker<span class="sig">XM-1 / M1A1 · 254</span></td>
+          <td class="cell t-high"><span class="pct">3</span><span class="lbl">strong</span></td>
+          <td class="cell t-mid"><span class="pct">4</span><span class="lbl">the contract</span></td>
+          <td class="cell t-low"><span class="pct">6</span><span class="lbl">uphill</span></td>
+        </tr>
+        <tr>
+          <td class="rowh">T3 attacker<span class="sig">M1A2 · 368</span></td>
+          <td class="cell t-exposed"><span class="pct">2</span><span class="lbl">wipes</span></td>
+          <td class="cell t-high"><span class="pct">3</span><span class="lbl">strong</span></td>
+          <td class="cell t-mid"><span class="pct">4</span><span class="lbl">the contract</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="note-card">
+      <h3><span class="tag green">Invariant</span> The diagonal is the contract</h3>
+      <p>Every same-tier duel is a 4-shot fight, at every tier — the game always <em>feels</em> the same to two equal players. Off the diagonal: one tier up kills in 2–3 and takes 6+; two tiers up is a massacre. That's "recruit for the now vs research for the future," expressed as pure math — plus the T3 outranges and outspots by ~20%, so it usually lands the first two shells before the T1 replies.</p>
+    </div>
+    <div class="note-card">
+      <h3><span class="tag red">Decided</span> Cross-tier one-shots allowed</h3>
+      <p>A T3 ATGM one-shots a T1 tank even frontally (630 vs 500 HP). F4 says that's the point — approved, ship without a clamp, playtest. If it ever feels bad, the fix is one Luau clamp in DamageSystem: <em>no single hit exceeds 90% of MaxHealth on a full-health vehicle</em>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <h2>The stat sheets</h2>
+  </div>
+  <p class="sec-sub">Derived, not invented: T1 anchors are today's live units (validated in the Jul-12 patch), tiers generated by the law, every cell recomputed and checked. USSR uses the same skeleton with ±10% personality swings (more HP/alpha, worse reload/optics) — flavor inside the envelope, never a new envelope.</p>
+
+  <h3 class="block-title">Tanks <span class="cap">coax MG added later as a second weapon: light SmallArms burst, anti-infantry only</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Tier</th><th>Line</th><th class="num">HP</th><th class="num">Dmg</th><th class="num">Reload</th><th class="num">Range</th><th class="num">Price</th><th class="num">Pop</th></tr></thead>
+      <tbody>
+        <tr><td class="ctr">T1</td><td class="unit">M60A1 / M60RISE</td><td class="num">500 / 575</td><td class="num">175</td><td class="num">9.0s</td><td class="num">800–900</td><td class="num">$750–850</td><td class="num">3</td></tr>
+        <tr><td class="ctr">T2</td><td class="unit">XM-1 / M1A1</td><td class="num">725</td><td class="num">254</td><td class="num">8.5s</td><td class="num">880</td><td class="num">$1275</td><td class="num">3</td></tr>
+        <tr><td class="ctr">T3</td><td class="unit">M1A2 line</td><td class="num">1050</td><td class="num">368</td><td class="num">8.0s</td><td class="num">960</td><td class="num">$2150</td><td class="num">4</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="block-title">Infantry <span class="cap">per-soldier HP / weapon dmg — squads keep today's compositions</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Tier</th><th class="num">Soldier HP</th><th class="num">Rifle / MG</th><th class="num">ATGM base</th><th class="num">Squad HP</th><th>Contract check</th></tr></thead>
+      <tbody>
+        <tr><td class="ctr">T1</td><td class="num">30</td><td class="num">6 / 4</td><td class="num">100</td><td class="num">~150</td><td class="note">15s firefight · 2-shell tank kill · ATGM 2-front/1-flank</td></tr>
+        <tr><td class="ctr">T2</td><td class="num">43</td><td class="num">9 / 6</td><td class="num">145</td><td class="num">~215</td><td class="note">identical feel — all three hold</td></tr>
+        <tr><td class="ctr">T3</td><td class="num">63</td><td class="num">13 / 9</td><td class="num">210</td><td class="num">~315</td><td class="note">identical feel — all three hold</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="block-title">IFVs <span class="cap">TOW rule: TOW_Damage = half the same-tier tank's HP → one load ≈ 75% frontally, flank pair kills</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Tier</th><th>Line</th><th class="num">HP</th><th class="num">Autocannon</th><th class="num">TOW</th><th>Contract check</th></tr></thead>
+      <tbody>
+        <tr><td class="ctr">T1</td><td class="unit">M113 ACAV (no TOW)</td><td class="num">300</td><td class="num">15 @ 0.6s</td><td class="num">—</td><td class="note">squad shred ~5–6s · tank 2-shots it</td></tr>
+        <tr><td class="ctr">T2</td><td class="unit">M2 Bradley (early)</td><td class="num">435</td><td class="num">22 @ 0.6s</td><td class="num">365</td><td class="note">same feel, one tier up</td></tr>
+        <tr><td class="ctr">T3</td><td class="unit">M3A3 Bradley</td><td class="num">630</td><td class="num">31 @ 0.6s</td><td class="num">525</td><td class="note"><strong>re-anchor from today's 400/18/250</strong> when tiers ship</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="block-title">Artillery <span class="cap">splash falloff already built: full at center → 30% at edge · scatter grows with range</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Tier</th><th class="num">HP</th><th class="num">Center dmg</th><th class="num">Blast</th><th class="num">Reload</th><th>Contract check</th></tr></thead>
+      <tbody>
+        <tr><td class="ctr">T1</td><td class="num">200</td><td class="num">300</td><td class="num">28</td><td class="num">14s</td><td class="note">direct ≈ 60% of a T1 tank · near-hit wipes a squad · edge chips</td></tr>
+        <tr><td class="ctr">T2</td><td class="num">290</td><td class="num">435</td><td class="num">30</td><td class="num">13.5s</td><td class="note">—</td></tr>
+        <tr><td class="ctr">T3</td><td class="num">420</td><td class="num">630</td><td class="num">32</td><td class="num">13s</td><td class="note">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:14.5px;margin-top:10px;max-width:66ch">Artillery's balance lever is <strong>not damage — it's the miss</strong>: slow shells, long reload, range-scaled scatter. It should feel devastating when it connects and rarely connect on moving targets. Tune <span style="font-family:var(--mono)">SpreadRadius</span> before ever touching its damage.</p>
+
+  <h3 class="block-title">AntiAir <span class="cap">the tax — same ×1.45 law</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Tier</th><th>Line (USA)</th><th class="num">HP</th><th class="num">vs-air DPS</th><th class="num">AA range</th><th>Contract check</th></tr></thead>
+      <tbody>
+        <tr><td class="ctr">T1</td><td class="unit">M163 VADS</td><td class="num">220</td><td class="num">~42</td><td class="num">650</td><td class="note">kills T1 heli (250 HP) in ~6s exposure</td></tr>
+        <tr><td class="ctr">T2</td><td class="unit">M247 / Chaparral</td><td class="num">320</td><td class="num">~61</td><td class="num">720</td><td class="note">same feel · Chaparral trades DPS for missile alpha</td></tr>
+        <tr><td class="ctr">T3</td><td class="unit">Avenger / Linebacker</td><td class="num">465</td><td class="num">~88</td><td class="num">790</td><td class="note">same feel · also the anti-jet anchor</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="block-title">Helicopters <span class="cap">persistent units · HP = 0.5× same-tier tank</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Tier</th><th>Line (USA / USSR)</th><th class="num">HP</th><th>Loadout</th><th>Contract check</th></tr></thead>
+      <tbody>
+        <tr><td class="ctr">T1</td><td class="unit">AH-1 Cobra / Mi-24A</td><td class="num">250</td><td class="note">rockets + autocannon (no ATGM)</td><td class="note">anti-infantry/light only — the sky opens gently</td></tr>
+        <tr><td class="ctr">T2</td><td class="unit">AH-1S TOW / Mi-24V</td><td class="num">365</td><td class="note">+ ATGM ×145 base (4 rds)</td><td class="note">2-shots same-tier tank · dies to same-tier AA in ~6s</td></tr>
+        <tr><td class="ctr">T3</td><td class="unit">AH-64 Apache / Ka-50</td><td class="num">525</td><td class="note">+ ATGM ×210 base (8 rds)</td><td class="note">same feel, bigger magazine — the T3 tank's executioner</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="block-title">Jet strikes <span class="cap">call-ins, never map units</span></h3>
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Strike</th><th>Airframe (USA / USSR)</th><th class="ctr">Tier</th><th class="num">Payload</th><th class="num">Cooldown</th><th>Contract check</th></tr></thead>
+      <tbody>
+        <tr><td class="unit">Bomb run</td><td class="note">F-4 Phantom / MiG-23</td><td class="ctr">T2</td><td class="num">500 ctr · blast 35</td><td class="num">90s</td><td class="note">direct ≈ 70% of a T2 tank · wipes squads near-hit · 3–4s telegraph</td></tr>
+        <tr><td class="unit">Heavy bomb run</td><td class="note">F-111 / Su-24</td><td class="ctr">T3</td><td class="num">700 ctr · blast 40</td><td class="num">90s</td><td class="note">same feel one tier up</td></tr>
+        <tr><td class="unit">Strafing run</td><td class="note">A-10 / Su-25</td><td class="ctr">T3</td><td class="num">line dmg · Autocannon ×2</td><td class="num">75s</td><td class="note">shreds light columns · ~40% on a tank · never deletes armor</td></tr>
+        <tr><td class="unit">Air patrol</td><td class="note">F-15 / MiG-29</td><td class="ctr">T3</td><td class="num">kills 1 heli / contests 1 run</td><td class="num">60s</td><td class="note">the counter-pick when the enemy went air-heavy</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-num">06</span>
+    <h2>What changes in code</h2>
+  </div>
+  <p class="sec-sub">A mix of shipped, staged, and air-phase work. Nothing here throws away anything from the Jul-12 patch — every shipped value survives as a T1 anchor or contract cell.</p>
+
+  <div class="panel scroll">
+    <table class="stat">
+      <thead><tr><th>Change</th><th>Where</th><th>Status / why</th></tr></thead>
+      <tbody>
+        <tr><td class="unit">TankGun damage type — <span style="font-family:var(--mono)">Infantry = 0.5</span> row</td><td class="note">PrefabContract + all 4 tank prefabs</td><td class="note"><span class="tag green">shipped</span> tanks 2-shell squads instead of one-shelling; VFX verified unchanged. Also fixed in passing: IFV defaults had a duplicate DamageType key (last-wins = SmallArms) — future IFVs would have stamped wrong.</td></tr>
+        <tr><td class="unit">Coax MG second-weapon on tanks</td><td class="note">new small system — TOWSystem is the pattern</td><td class="note"><span class="tag amber">staged</span> keeps the 9s main gun without helpless gaps</td></tr>
+        <tr><td class="unit">Tier stamping helper — the ×1.45 law applied from one table</td><td class="note">PrefabContract / PrefabStamper</td><td class="note"><span class="tag amber">staged</span> author a line's T1 base once; tiers derived, never drift</td></tr>
+        <tr><td class="unit">BalanceContract validator — reads prefabs, prints violated contract cells</td><td class="note">new dev script</td><td class="note"><span class="tag amber">staged</span> the contract stays enforced forever; any stat edit that breaks a cell shows in Output</td></tr>
+        <tr><td class="unit">Bradley T3 re-anchor (400/18/250 → 630/31/525)</td><td class="note">prefab attrs</td><td class="note"><span class="tag amber">staged</span> only when T1/T2 IFVs exist — today it correctly plays as the only IFV in a T1 world</td></tr>
+        <tr><td class="unit">Air layer targeting — <span style="font-family:var(--mono)">IsAir</span> + <span style="font-family:var(--mono)">CanTargetAir</span> filter</td><td class="note">TargetingSystem + PrefabContract</td><td class="note"><span class="tag blue">air phase</span> the foundation: most ground weapons simply cannot shoot up</td></tr>
+        <tr><td class="unit">Helicopter role — fixed altitude, ignores navmesh/mud, hover-fire</td><td class="note">UnitMovement air branch + KnownRoles</td><td class="note"><span class="tag blue">air phase</span> persistent unit → existing combat/vision/UI stack mostly just works</td></tr>
+        <tr><td class="unit">JetStrikeSystem — telegraph → run → payload → exit, AA fires during the run</td><td class="note">new system — ArtillerySystem is the closest pattern</td><td class="note"><span class="tag blue">air phase</span> cooldown + telegraph + AA attrition are the whole balance surface</td></tr>
+        <tr><td class="unit">Rocket + Bomb damage types</td><td class="note">ArmorMultiplier + ArtillerySystem falloff reuse</td><td class="note"><span class="tag blue">air phase</span> barrages and bomb runs express through existing machinery</td></tr>
+        <tr><td class="unit">Optional F1 hard clamp (hit ≤ 90% MaxHealth)</td><td class="note">DamageSystem, 3 lines</td><td class="note"><span class="tag red">only if needed</span> cross-tier one-shots approved for playtest first</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <span>Frontline Commander — TTK Doctrine &amp; Tier Law · v2</span>
+  <span>Numbers machine-validated · values subject to balancing</span>
+</footer>
+
+</div>
+</div>
+</body>
+</html>
