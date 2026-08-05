@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Controls &amp; Keybinds — Frontline Commander Field Manual</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --ground: #0E1419;
+    --panel: #161E26;
+    --panel-2: #1B252E;
+    --line: rgba(199, 209, 217, 0.10);
+    --line-strong: rgba(199, 209, 217, 0.20);
+    --ink: #C7D1D9;
+    --ink-bright: #EAF1F6;
+    --muted: #7E8C99;
+    --amber: #E8A33D;
+    --blue: #3E8ED6;
+    --red: #D64B3E;
+    --exposed: #D64B3E;
+    --high: #E8A33D;
+    --mid: #C7C24A;
+    --low: #6FB07A;
+    --hidden: #3F9E6E;
+    --display: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --body: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    --mono: "Consolas", "SF Mono", "Roboto Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  .page {
+    background:
+      linear-gradient(180deg, rgba(20,30,40,0.6), transparent 220px),
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, rgba(199,209,217,0.022) 39px 40px),
+      var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(20px, 5vw, 64px) 20px 80px;
+  }
+
+  .wrap { max-width: 940px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, rgba(232,163,61,0.5), transparent);
+  }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; color: var(--ink-bright); margin: 0; }
+  h1 { font-size: clamp(44px, 9vw, 92px); line-height: 0.92; letter-spacing: 0.01em; text-transform: uppercase; }
+  h2 { font-size: clamp(26px, 4.5vw, 40px); line-height: 1.0; letter-spacing: 0.02em; text-transform: uppercase; }
+  h3 { font-family: var(--body); font-weight: 700; font-size: 18px; letter-spacing: 0.01em; color: var(--ink-bright); }
+  p { margin: 0; }
+  strong { color: var(--ink-bright); font-weight: 600; }
+  .lead { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.5; color: var(--ink); max-width: 60ch; }
+  .muted { color: var(--muted); }
+
+  .hero { margin-bottom: 64px; }
+  .hero .eyebrow { margin-bottom: 26px; }
+  .hero h1 { margin-bottom: 22px; }
+  .hero h1 .sub { display: block; color: var(--amber); font-size: 0.42em; letter-spacing: 0.06em; margin-top: 10px; }
+
+  section { margin-top: 60px; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 22px; }
+  .sec-num { font-family: var(--mono); font-size: 13px; color: var(--amber); letter-spacing: 0.1em; padding-top: 4px; }
+
+  .panel {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: clamp(20px, 3vw, 30px);
+  }
+  .panel::before, .panel::after {
+    content: "";
+    position: absolute;
+    width: 9px; height: 9px;
+    border-color: var(--line-strong);
+    border-style: solid;
+  }
+  .panel::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .panel::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 14px; }
+  table.stat th, table.stat td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+  table.stat thead th { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+  table.stat tbody tr:last-child td { border-bottom: none; }
+  table.stat .unit { color: var(--ink-bright); font-family: var(--body); font-weight: 600; }
+  table.stat .note { color: var(--muted); font-family: var(--body); font-size: 14px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .note-card { background: var(--panel); border: 1px solid var(--line); padding: 20px 22px; }
+  .note-card h3 { margin-bottom: 8px; display:flex; align-items:center; gap: 10px; }
+  .note-card p { font-size: 15px; line-height: 1.55; color: var(--ink); }
+  .tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; border-radius: 2px; }
+  .tag.red { color: var(--red); }
+  .tag.blue { color: var(--blue); }
+
+  .prose p { margin-bottom: 14px; max-width: 64ch; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .tactics { display: grid; gap: 12px; }
+  .tactic { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: baseline; background: var(--panel); border: 1px solid var(--line); padding: 16px 20px; }
+  .tactic .glyph { font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; }
+  .tactic p { font-size: 15.5px; line-height: 1.5; }
+  .tactic b { color: var(--ink-bright); }
+
+  footer { margin-top: 70px; padding-top: 22px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display:flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 640px) {
+    .grid2 { grid-template-columns: 1fr; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; opacity: 1; transform: none; } }
+
+  /* ---- manual-specific: controller diagram + key caps ---- */
+  .padwrap { overflow-x: auto; }
+  .padwrap svg { display: block; margin: 0 auto; min-width: 700px; max-width: 100%; }
+  .padwrap text { font-family: var(--mono); }
+  .co-t { fill: var(--ink-bright); font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+  .co-d { fill: var(--muted); font-size: 10.5px; letter-spacing: 0.03em; }
+  .co-line { stroke: rgba(232,163,61,0.55); stroke-width: 1; fill: none; }
+  .co-dot { fill: var(--amber); }
+  .pad-body { fill: var(--panel-2); stroke: var(--line-strong); stroke-width: 1.2; }
+  .pad-part { fill: #232E38; stroke: var(--line-strong); stroke-width: 1; }
+  .pad-label { fill: var(--ink-bright); font-size: 11px; font-weight: 700; text-anchor: middle; }
+
+  kbd {
+    font-family: var(--mono); font-size: 13px; color: var(--ink-bright);
+    background: var(--panel-2); border: 1px solid var(--line-strong);
+    border-bottom-width: 2px; border-radius: 3px; padding: 1px 7px; white-space: nowrap;
+  }
+  .pbtn {
+    font-family: var(--mono); font-size: 12px; color: var(--amber);
+    border: 1px solid rgba(232,163,61,0.45); border-radius: 3px;
+    padding: 1px 7px; white-space: nowrap;
+  }
+  .psym { color: var(--muted); font-family: var(--mono); font-size: 12px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wrap">
+
+    <header class="hero reveal">
+      <p class="eyebrow">Frontline Commander &nbsp;//&nbsp; Field Manual 06</p>
+      <h1>Controls<br>&amp; Keybinds
+        <span class="sub">Command at your fingertips.</span>
+      </h1>
+      <p class="lead">Every input in the game — the full controller layout for Xbox and PS5,
+      the mouse and keyboard reference, and the reticle model that makes an RTS work from a couch.</p>
+    </header>
+
+    <!-- ============ 01 THE RETICLE ============ -->
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <h2>The Reticle</h2>
+      </div>
+      <div class="prose">
+        <p>On a controller there is no mouse pointer. Instead, a <strong>reticle sits fixed at the
+        center of your screen</strong> and the left stick moves the battlefield underneath it.
+        Whatever the reticle is over is what your buttons act on — select it, order onto it,
+        build on it. Park the reticle near an enemy and the targeting computer locks on and
+        shows its intel card; park it on one of your own selected units and the camera
+        starts <strong>tracking</strong> that unit until you move the stick again.</p>
+        <p>Touch the sticks and the reticle appears; touch the mouse and it hands back to the
+        pointer. Both inputs stay live at all times.</p>
+      </div>
+    </section>
+
+    <!-- ============ 02 CONTROLLER ============ -->
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <h2>Controller Layout</h2>
+      </div>
+
+      <div class="panel padwrap">
+        <svg viewBox="-45 0 1065 560" role="img" aria-label="Controller diagram with all bindings">
+          <!-- ===== lighting rig ===== -->
+          <defs>
+            <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#33404D"/>
+              <stop offset="0.45" stop-color="#212B35"/>
+              <stop offset="1" stop-color="#10161C"/>
+            </linearGradient>
+            <linearGradient id="gripL" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#2C3844"/>
+              <stop offset="1" stop-color="#0E141A"/>
+            </linearGradient>
+            <linearGradient id="gripR" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2C3844"/>
+              <stop offset="1" stop-color="#0E141A"/>
+            </linearGradient>
+            <radialGradient id="well" cx="0.5" cy="0.5" r="0.55">
+              <stop offset="0" stop-color="#0A0F14"/>
+              <stop offset="0.75" stop-color="#141B22"/>
+              <stop offset="1" stop-color="#2E3944"/>
+            </radialGradient>
+            <radialGradient id="cap" cx="0.36" cy="0.3" r="0.85">
+              <stop offset="0" stop-color="#46545F"/>
+              <stop offset="0.55" stop-color="#232D36"/>
+              <stop offset="1" stop-color="#0E141A"/>
+            </radialGradient>
+            <radialGradient id="dome" cx="0.38" cy="0.3" r="0.9">
+              <stop offset="0" stop-color="#333E48"/>
+              <stop offset="0.6" stop-color="#161D24"/>
+              <stop offset="1" stop-color="#080C10"/>
+            </radialGradient>
+            <linearGradient id="bump" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3A4753"/>
+              <stop offset="0.5" stop-color="#222C35"/>
+              <stop offset="1" stop-color="#131A21"/>
+            </linearGradient>
+            <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="rgba(255,255,255,0.10)"/>
+              <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+            <filter id="padShadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#000" flood-opacity="0.55"/>
+            </filter>
+            <filter id="floorBlur"><feGaussianBlur stdDeviation="9"/></filter>
+            <filter id="glow"><feGaussianBlur stdDeviation="2.2"/></filter>
+          </defs>
+
+          <!-- floor shadow -->
+          <ellipse cx="480" cy="482" rx="200" ry="17" fill="#000" opacity="0.5" filter="url(#floorBlur)"/>
+
+          <g filter="url(#padShadow)">
+            <!-- triggers + bumpers (behind the body) -->
+            <rect x="352" y="196" width="64" height="20" rx="8" fill="url(#bump)" stroke="rgba(199,209,217,0.14)" stroke-width="1"/>
+            <text class="pad-label" x="384" y="210">LT</text>
+            <rect x="544" y="196" width="64" height="20" rx="8" fill="url(#bump)" stroke="rgba(199,209,217,0.14)" stroke-width="1"/>
+            <text class="pad-label" x="576" y="210">RT</text>
+            <rect x="340" y="221" width="90" height="20" rx="9" fill="url(#bump)" stroke="rgba(199,209,217,0.18)" stroke-width="1"/>
+            <text class="pad-label" x="385" y="235">LB</text>
+            <rect x="530" y="221" width="90" height="20" rx="9" fill="url(#bump)" stroke="rgba(199,209,217,0.18)" stroke-width="1"/>
+            <text class="pad-label" x="575" y="235">RB</text>
+
+            <!-- body -->
+            <ellipse cx="382" cy="368" rx="66" ry="104" transform="rotate(-18 382 368)" fill="url(#gripL)"/>
+            <ellipse cx="578" cy="368" rx="66" ry="104" transform="rotate(18 578 368)" fill="url(#gripR)"/>
+            <rect x="330" y="252" width="300" height="130" rx="46" fill="url(#bodyGrad)"/>
+            <!-- top rim light + face sheen -->
+            <rect x="330" y="252" width="300" height="130" rx="46" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+            <rect x="338" y="256" width="284" height="52" rx="26" fill="url(#sheen)"/>
+            <ellipse cx="373" cy="322" rx="52" ry="86" transform="rotate(-18 373 322)" fill="rgba(255,255,255,0.05)"/>
+            <ellipse cx="587" cy="322" rx="52" ry="86" transform="rotate(18 587 322)" fill="rgba(255,255,255,0.05)"/>
+
+            <!-- left stick: concave well + convex cap -->
+            <circle cx="398" cy="292" r="30" fill="url(#well)"/>
+            <circle cx="398" cy="292" r="18" fill="url(#cap)" stroke="rgba(0,0,0,0.6)" stroke-width="1"/>
+            <circle cx="398" cy="292" r="18" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1" stroke-dasharray="2 3"/>
+            <ellipse cx="392" cy="285" rx="7" ry="4.5" fill="rgba(255,255,255,0.22)"/>
+            <text class="pad-label" x="398" y="297" fill="#9FB0BE">LS</text>
+
+            <!-- d-pad: inset well + beveled cross -->
+            <circle cx="432" cy="358" r="27" fill="url(#well)"/>
+            <rect x="424" y="336" width="16" height="44" rx="4" fill="url(#bump)" stroke="rgba(0,0,0,0.55)" stroke-width="1"/>
+            <rect x="410" y="350" width="44" height="16" rx="4" fill="url(#bump)" stroke="rgba(0,0,0,0.55)" stroke-width="1"/>
+            <rect x="425" y="337" width="14" height="6" rx="3" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="432" cy="358" r="5" fill="#0C1117" stroke="rgba(255,255,255,0.08)"/>
+
+            <!-- face buttons: dark glass domes, colored glow letters -->
+            <g>
+              <circle cx="562" cy="262" r="13" fill="url(#dome)" stroke="rgba(232,163,61,0.55)" stroke-width="1.1"/>
+              <ellipse cx="557" cy="256.5" rx="6" ry="3.5" fill="rgba(255,255,255,0.16)"/>
+              <text class="pad-label" x="562" y="266.5" fill="var(--amber)">Y</text>
+
+              <circle cx="535" cy="289" r="13" fill="url(#dome)" stroke="rgba(62,142,214,0.55)" stroke-width="1.1"/>
+              <ellipse cx="530" cy="283.5" rx="6" ry="3.5" fill="rgba(255,255,255,0.16)"/>
+              <text class="pad-label" x="535" y="293.5" fill="var(--blue)">X</text>
+
+              <circle cx="589" cy="289" r="13" fill="url(#dome)" stroke="rgba(214,75,62,0.55)" stroke-width="1.1"/>
+              <ellipse cx="584" cy="283.5" rx="6" ry="3.5" fill="rgba(255,255,255,0.16)"/>
+              <text class="pad-label" x="589" y="293.5" fill="var(--red)">B</text>
+
+              <circle cx="562" cy="316" r="13" fill="url(#dome)" stroke="rgba(111,176,122,0.55)" stroke-width="1.1"/>
+              <ellipse cx="557" cy="310.5" rx="6" ry="3.5" fill="rgba(255,255,255,0.16)"/>
+              <text class="pad-label" x="562" y="320.5" fill="var(--low)">A</text>
+            </g>
+
+            <!-- right stick -->
+            <circle cx="524" cy="356" r="26" fill="url(#well)"/>
+            <circle cx="524" cy="356" r="15" fill="url(#cap)" stroke="rgba(0,0,0,0.6)" stroke-width="1"/>
+            <circle cx="524" cy="356" r="15" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1" stroke-dasharray="2 3"/>
+            <ellipse cx="519" cy="350" rx="6" ry="4" fill="rgba(255,255,255,0.22)"/>
+            <text class="pad-label" x="524" y="361" fill="#9FB0BE">RS</text>
+
+            <!-- view / menu -->
+            <rect x="448" y="284" width="18" height="11" rx="5" fill="url(#bump)" stroke="rgba(0,0,0,0.5)"/>
+            <rect x="494" y="284" width="18" height="11" rx="5" fill="url(#bump)" stroke="rgba(0,0,0,0.5)"/>
+          </g>
+
+          <!-- ===== callouts: LEFT column ===== -->
+          <circle class="co-dot" cx="384" cy="205" r="3"/>
+          <polyline class="co-line" points="384,205 300,150 258,150"/>
+          <text class="co-t" x="250" y="146" text-anchor="end">LT — hold</text>
+          <text class="co-d" x="250" y="161" text-anchor="end">production queue focus (recruit menu)</text>
+
+          <circle class="co-dot" cx="360" cy="231" r="3"/>
+          <polyline class="co-line" points="360,231 288,208 258,208"/>
+          <text class="co-t" x="250" y="204" text-anchor="end">LB — select all on screen</text>
+          <text class="co-d" x="250" y="219" text-anchor="end">press twice: every unit everywhere</text>
+
+          <circle class="co-dot" cx="372" cy="286" r="3"/>
+          <polyline class="co-line" points="372,286 296,272 258,272"/>
+          <text class="co-t" x="250" y="268" text-anchor="end">LS — move camera</text>
+          <text class="co-d" x="250" y="283" text-anchor="end">pans the map under the reticle · aims menus</text>
+          <text class="co-d" x="250" y="298" text-anchor="end" fill="var(--blue)">while holding X: shapes the formation</text>
+
+          <circle class="co-dot" cx="418" cy="358" r="3"/>
+          <polyline class="co-line" points="418,358 310,352 258,352"/>
+          <text class="co-t" x="250" y="336" text-anchor="end">D-PAD</text>
+          <text class="co-d" x="250" y="351" text-anchor="end">&#9650; fire at will / hold fire</text>
+          <text class="co-d" x="250" y="366" text-anchor="end">&#9658; special: artillery arc · load infantry</text>
+          <text class="co-d" x="250" y="381" text-anchor="end">&#9668; STOP</text>
+
+          <!-- ===== callouts: RIGHT column ===== -->
+          <circle class="co-dot" cx="576" cy="205" r="3"/>
+          <polyline class="co-line" points="576,205 660,132 700,132"/>
+          <text class="co-t" x="708" y="128">RT — reserved</text>
+          <text class="co-d" x="708" y="143">future binding</text>
+
+          <circle class="co-dot" cx="600" cy="231" r="3"/>
+          <polyline class="co-line" points="600,231 672,182 700,182"/>
+          <text class="co-t" x="708" y="178">RB — cycle unit class</text>
+          <text class="co-d" x="708" y="193">in build &amp; recruit menus</text>
+
+          <circle class="co-dot" cx="562" cy="249" r="3"/>
+          <polyline class="co-line" points="562,249 648,232 700,232"/>
+          <text class="co-t" x="708" y="228" fill="var(--amber)">Y — sell building</text>
+          <text class="co-d" x="708" y="243">in a building's menu, when it's yours</text>
+
+          <circle class="co-dot" cx="602" cy="289" r="3"/>
+          <polyline class="co-line" points="602,289 664,282 700,282"/>
+          <text class="co-t" x="708" y="278" fill="var(--red)">B — back</text>
+          <text class="co-d" x="708" y="293">deselect · cancel · close menus</text>
+
+          <circle class="co-dot" cx="575" cy="316" r="3"/>
+          <polyline class="co-line" points="575,316 656,332 700,332"/>
+          <text class="co-t" x="708" y="328" fill="var(--low)">A — select</text>
+          <text class="co-d" x="708" y="343">tap: unit / building at reticle · confirm in menus</text>
+          <text class="co-d" x="708" y="358">hold: selection ring paints units</text>
+          <text class="co-d" x="708" y="373">double-tap: all of that unit type on screen</text>
+
+          <circle class="co-dot" cx="524" cy="289" r="3"/>
+          <polyline class="co-line" points="524,289 524,150 560,116 700,116"/>
+          <text class="co-t" x="708" y="96" fill="var(--blue)">X — action order</text>
+          <text class="co-d" x="708" y="111">ground: move &nbsp;·&nbsp; enemy: attack</text>
+          <text class="co-d" x="708" y="126" opacity="0">.</text>
+
+          <circle class="co-dot" cx="524" cy="378" r="3"/>
+          <polyline class="co-line" points="524,378 560,420 700,420"/>
+          <text class="co-t" x="708" y="416">RS — rotate &amp; zoom</text>
+          <text class="co-d" x="708" y="431">left/right orbits · up/down zooms</text>
+          <text class="co-d" x="708" y="446">stays live while shaping a formation</text>
+
+          <!-- hold-X note under the pad -->
+          <text class="co-t" x="480" y="512" text-anchor="middle" fill="var(--blue)">HOLD X + LEFT STICK — SET A FORMATION</text>
+          <text class="co-d" x="480" y="530" text-anchor="middle">stick left/right widens the line · up/down rotates facing · release X to execute</text>
+        </svg>
+      </div>
+
+      <div style="height:14px"></div>
+
+      <div class="panel scroll">
+        <table class="stat">
+          <thead><tr><th>Xbox</th><th>PS5</th><th>Action</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pbtn">LS</span></td><td class="psym">L-stick</td><td class="unit">Move camera / aim menus</td>
+                <td class="note">The battlefield pans under the fixed reticle. Inside the build fan or recruit wheel, LS aims the wedges. While holding X it shapes the formation instead.</td></tr>
+            <tr><td><span class="pbtn">RS</span></td><td class="psym">R-stick</td><td class="unit">Rotate &amp; zoom camera</td>
+                <td class="note">Left/right orbits, up/down zooms — stays live even while shaping a formation.</td></tr>
+            <tr><td><span class="pbtn">A</span></td><td class="psym">✕</td><td class="unit">Select / confirm</td>
+                <td class="note">Tap: unit or building at the reticle (a building opens its menu). Hold: a growing ring paints every friendly it touches — they stay selected. Double-tap: every on-screen unit of the same type.</td></tr>
+            <tr><td><span class="pbtn">B</span></td><td class="psym">◯</td><td class="unit">Back / deselect</td>
+                <td class="note">Closes menus, cancels placement and artillery aiming, otherwise deselects everything.</td></tr>
+            <tr><td><span class="pbtn">X</span></td><td class="psym">▢</td><td class="unit">Action order</td>
+                <td class="note">Ground under the reticle: move there. Enemy near the reticle: attack it. Hold X: formation preview — the LEFT stick sets width and facing, release to execute.</td></tr>
+            <tr><td><span class="pbtn">Y</span></td><td class="psym">△</td><td class="unit">Sell building</td>
+                <td class="note">Inside a building's menu, when the building is yours (never your Command Center). Refunds 30%.</td></tr>
+            <tr><td><span class="pbtn">LB</span></td><td class="psym">L1</td><td class="unit">Select all on screen</td>
+                <td class="note">Press twice quickly for every unit you own, anywhere. In menus: cycle unit class left.</td></tr>
+            <tr><td><span class="pbtn">RB</span></td><td class="psym">R1</td><td class="unit">Cycle class (menus)</td>
+                <td class="note">Steps the class ring in the recruit wheel; pages the build fan.</td></tr>
+            <tr><td><span class="pbtn">LT</span></td><td class="psym">L2</td><td class="unit">Queue focus (hold)</td>
+                <td class="note">In the recruit wheel: hold to aim the production conveyor, A or X cancels the aimed unit, release to return.</td></tr>
+            <tr><td><span class="pbtn">D-pad ▲</span></td><td class="psym">D-pad ▲</td><td class="unit">Fire at will / hold fire</td>
+                <td class="note">Toggles the whole selection's trigger discipline.</td></tr>
+            <tr><td><span class="pbtn">D-pad ►</span></td><td class="psym">D-pad ►</td><td class="unit">Unit special</td>
+                <td class="note">Artillery: enter arc-fire aiming (A fires the barrage, B cancels). Transports: load / unload infantry.</td></tr>
+            <tr><td><span class="pbtn">D-pad ◄</span></td><td class="psym">D-pad ◄</td><td class="unit">Stop</td>
+                <td class="note">Braking halt — cancels move, attack and retreat orders.</td></tr>
+            <tr><td><span class="pbtn">Reticle dwell</span></td><td class="psym">—</td><td class="unit">Camera tracking</td>
+                <td class="note">Hold the reticle on one of your selected units for a moment: the camera glues to it. Any pan breaks it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ 03 MOUSE & KEYBOARD ============ -->
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">03</span>
+        <h2>Mouse &amp; Keyboard</h2>
+      </div>
+
+      <div class="panel scroll">
+        <table class="stat">
+          <thead><tr><th>Input</th><th>Action</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td><kbd>LMB</kbd></td><td class="unit">Select</td>
+                <td class="note">Click a unit or building; drag a box to select a group; click empty ground to deselect. <kbd>Shift</kbd> adds to the selection (click again to remove one).</td></tr>
+            <tr><td><kbd>RMB</kbd></td><td class="unit">Order</td>
+                <td class="note">On ground: move. On a spotted enemy: attack — pause the cursor near any enemy first and the targeting computer locks on for you.</td></tr>
+            <tr><td><kbd>RMB hold</kbd></td><td class="unit">Shape formation</td>
+                <td class="note">Swipe right/left to widen or narrow the formation, up/down to rotate its facing. Ghosts preview every slot; release to execute.</td></tr>
+            <tr><td><kbd>W A S D</kbd></td><td class="unit">Pan camera</td><td class="note">Speed scales with zoom.</td></tr>
+            <tr><td><kbd>Q</kbd> / <kbd>E</kbd></td><td class="unit">Rotate camera</td><td class="note">Rotation never breaks camera tracking.</td></tr>
+            <tr><td><kbd>MMB drag</kbd></td><td class="unit">Orbit camera</td><td class="note">Free yaw and pitch while held.</td></tr>
+            <tr><td><kbd>Wheel</kbd></td><td class="unit">Zoom</td><td class="note"></td></tr>
+            <tr><td><kbd>Space</kbd> hold</td><td class="unit">Tactical view</td>
+                <td class="note">Attack-range rings, sight outlines, blind-spot shading and movement paths for your force.</td></tr>
+            <tr><td><kbd>Ctrl</kbd> hold</td><td class="unit">Territory overlay</td>
+                <td class="note">Frontline control map — blue yours, red theirs.</td></tr>
+            <tr><td><kbd>V</kbd></td><td class="unit">Build menu</td>
+                <td class="note">Opens the radial build fan (or click an empty build pad at your base). Selecting a production building opens its recruit wheel.</td></tr>
+            <tr><td><kbd>R</kbd></td><td class="unit">Load / unload transport</td>
+                <td class="note">Selected transports pick up the nearest infantry squad, or drop the one they carry.</td></tr>
+            <tr><td><kbd>Tab</kbd></td><td class="unit">Command roster</td><td class="note"><kbd>Backspace</kbd> closes it.</td></tr>
+            <tr><td><kbd>O</kbd></td><td class="unit">Audio settings</td><td class="note"></td></tr>
+            <tr><td><kbd>Esc</kbd></td><td class="unit">Cancel</td><td class="note">Backs out of placement, artillery aiming, and the radial menus.</td></tr>
+            <tr><td><kbd>Cursor dwell</kbd></td><td class="unit">Camera tracking</td>
+                <td class="note">Rest the cursor on one of your selected units: the camera follows it until you pan.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ 04 THE FIVE THAT MATTER ============ -->
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-num">04</span>
+        <h2>The Five That Matter</h2>
+      </div>
+      <div class="tactics">
+        <div class="tactic"><span class="glyph">T1</span><p><b>A selects, X acts, B backs out.</b> Ninety percent of command is those three buttons at the reticle.</p></div>
+        <div class="tactic"><span class="glyph">T2</span><p><b>Hold A and sweep.</b> The paint ring is the fastest way to gather a battlegroup — everything it touches stays yours, even after the ring moves on.</p></div>
+        <div class="tactic"><span class="glyph">T3</span><p><b>Hold X before a fight, not during one.</b> A shaped line with its facing set beats a blob arriving one tank at a time — armor is thickest on the front plate.</p></div>
+        <div class="tactic"><span class="glyph">T4</span><p><b>Double-LB is your panic button.</b> Everything you own, selected, instantly — then X on the threat.</p></div>
+        <div class="tactic"><span class="glyph">T5</span><p><b>Let the camera drive.</b> Park the reticle on your spearhead and tracking follows the advance while your hands stay free for orders.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Frontline Commander — Controls &amp; Keybinds</span>
+      <span>Bindings subject to change during alpha</span>
+    </footer>
+
+  </div>
+</div>
+</body>
+</html>
